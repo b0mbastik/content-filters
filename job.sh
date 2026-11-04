@@ -17,5 +17,6 @@ export HF_HUB_OFFLINE=1
 export TOKENIZERS_PARALLELISM=false
 EXTRA=()
 if [[ -n "${LIMIT:-}" ]]; then EXTRA=(--limit "$LIMIT"); fi
-.venv/bin/python run.py --stage stages/A.json \
-  --reps "${REPS:-3}" --out "${OUT:-results/stage-a.jsonl}" "${EXTRA[@]}"
+if [[ -n "${OUT:-}" ]]; then EXTRA+=(--out "$OUT"); fi
+.venv/bin/python run.py --stage "${STAGE:-stages/A.json}" \
+  --reps "${REPS:-3}" "${EXTRA[@]}"

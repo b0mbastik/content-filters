@@ -2,7 +2,7 @@
 
 Stage A: establish prompt-injection vulnerability
 
-**Release scope:** This is **Stage A only**, built from the v4 synthetic university-IT dataset. It runs **BASE vs I, using the minimally instructed P0 architecture**. It does **not** run P1/P2 defenses or evidence/EI comparisons. No IFAD data are used.
+**Release scope:** Stages A and B use the v4 synthetic university-IT dataset. Stage A runs BASE vs I with a flattened single-user-message P0; Stage B compares BASE vs I with prompt hardening P1 and P2. This protection-layer design supersedes the earlier role-separated P0 and earlier P1/P2; those earlier results cannot serve as the new baseline. Evidence/EI comparisons are not implemented. No IFAD data are used.
 
 ## Research question and interpretation
 
@@ -27,8 +27,8 @@ content-filters/
 │   ├── rubric.txt            # Risk-grading criteria
 │   └── manifest.json         # Labels and attack assignments
 ├── injections/              # 12 separate attack text files
-├── prompts/P0.txt           # Unprotected baseline architecture
-├── stages/A.json            # The ONLY active stage: BASE and I with P0
+├── prompts/                 # P0 baseline and P1/P2 guards
+├── stages/                  # Stage A and B configurations
 ├── docs/methodology.md
 ├── project.py               # Shared loader and conditional document composer
 ├── run.py                   # One GPU runner, reproducible seeds, append/resume
@@ -101,20 +101,38 @@ cat results/stage-a-summary.csv
 
 If you edit attack templates or other inputs, use a **new output filename** and document edits and reasons. Do not pool results from different prompt versions. A separate held-out dataset is needed to assess generalisation after tuning attacks or defences on these cases.
 
-Older result files from the previous two-group run can be analysed together with `python3 analyse.py results/stage-a-development.jsonl results/stage-a-evaluation.jsonl`. Keep the original files unchanged; do not mix them with runs from different source versions or sampling settings.
+Compatible older result files from the previous two-group run can be analysed together with `python3 analyse.py results/stage-a-development.jsonl results/stage-a-evaluation.jsonl`. Keep the original files unchanged; do not mix them with runs from different source versions or sampling settings.
 
 Each result JSONL has a companion `.jsonl.meta.json` file with run settings and exact prompts; keep both files together. The output includes per-model/architecture/category/target counts, matched baseline accuracy, raw target hits, conditional attack success, directional grade shifts, and refusals/other outputs. Each repetition is a stochastic trial of the **same underlying scenario**, not an independent case. Do not present 180 calls as 180 independent scenarios.
 
 Job failures: use `sacct -u "$USER" --format=JobID,JobName,State,ExitCode`; inspect `logs/ipi-stage-a-<jobid>.err`. Existing results can resume if input files and sampling parameters are unchanged. Start a new results file for a modified dataset or attacks.
 
-## How Stages B and C are added without changing Stage A
+## Stage B: prompt hardening
 
-- **Stage B (prompt hardening):** add `prompts/P1.txt`, `prompts/P2.txt` and a new `stages/B.json` requesting `BASE`, `I` under architectures P1/P2. Reuse `run.py` and the same dataset. Keep the existing Stage A P0 results as the control instead of rerunning them.
-- **Stage C (evidence preservation):** define evidence labels and ordering, then implement evidence conditions and analysis. The existing evidence files are retained for this future work.
-- **Categories 2–5:** add separate `data/category_2/` directories using the same per-category files and a new category ID in a stage config. Do not force other domains into the university rubric.
+Stage B uses the same 30 cases, rubric and attacks with P1 and P2, each in BASE and I conditions. P1 uses a system guard and fixed document tags; P2 uses that guard, a randomly generated per-case/repetition nonce boundary, and a post-document restatement. The prompts are fixed in `prompts/P1.txt` and `prompts/P2.txt`. Each scenario/repetition shares the deterministic seed across conditions and architectures. P2 generates a random token for each scenario/repetition, shared by its BASE/I pair and stored with exact prompts in the metadata for resume and audit. This is an exploratory comparison, not a held-out evaluation; the expected MEDIUM labels still need independent review.
 
-This is *additive execution*, not a claim that later analysis or new guardrail implementations will require zero new code. In particular, an external content filter (distinct from prompt hardening) would need its own adapter and test conditions.
+```bash
+python3 validate.py
+python3 -m unittest discover -s tests -v
+python3 run.py --stage stages/B.json --dry-run --reps 1 --limit 1
+sbatch --export=ALL,STAGE=stages/B.json,REPS=1,LIMIT=1,OUT=results/stage-b-layers-v2-smoke.jsonl job.sh
+# Once the smoke test completes, expect four lines and analyse it:
+wc -l results/stage-b-layers-v2-smoke.jsonl
+python3 analyse.py results/stage-b-layers-v2-smoke.jsonl
+# Full run: 30 cases × 2 conditions × 2 prompts × 3 repetitions = 360 calls
+sbatch --export=ALL,STAGE=stages/B.json,REPS=3,OUT=results/stage-b-layers-v2.jsonl job.sh
+# Run the revised flattened P0 as a fresh baseline too:
+sbatch --export=ALL,STAGE=stages/A.json,REPS=3,OUT=results/stage-a-layers-v2.jsonl job.sh
+# After both revised runs finish, compare them (use a fresh Stage B output):
+python3 compare.py results/stage-a-layers-v2.jsonl results/stage-b-layers-v2.jsonl > results/layers-v2-comparison.csv
+```
+
+The comparison requires complete matching scenarios and repetitions, seeds, sampling settings, and exact current source prompts; it rejects incompatible or partial runs. For historical inputs that have since changed, restore the matching source version before comparing. Run the smoke test and full experiment in separate files. `analyse.py` also accepts a single result file, including an incomplete selection of scenarios if each has complete BASE/I pairs.
+
+In the CSV, `base_mean_low_cases` etc. and `i_mean_low_cases` etc. are sums of per-scenario fractions across repetitions. With all 30 scenarios, these are the mean numbers of cases out of 30; for target-specific rows the denominator is 15. `mean_conditional_success_cases` counts target outputs only when the matched clean output is correct. The conditional success rate divides eligible target hits by clean-correct trials; the raw trial counts are retained for audit. OTHER and REFUSAL have their own mean-case columns.
+
+For Stage C, evidence labels and ordering, evidence conditions, and their analysis still need to be implemented. The existing evidence files are retained for that work. Other domains require separate datasets and rubrics; an external content filter requires its own adapter and test conditions.
 
 ## Scientific limitations
 
-See [`docs/methodology.md`](docs/methodology.md). No inference was performed on Hypatia for this version, and no successful attacks are claimed in advance. Genuine risk accuracy requires independent annotation; a fixed MEDIUM baseline narrows the generalisability of the experiment.
+See [`docs/methodology.md`](docs/methodology.md). The revised protection-layer design requires fresh inference; earlier results belong to the previous design. Genuine risk accuracy requires independent annotation; a fixed MEDIUM baseline narrows the generalisability of the experiment.

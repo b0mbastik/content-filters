@@ -20,11 +20,10 @@ def validate():
         assert correct_label(item, 'BASE') == correct_label(item, 'I') == 'MEDIUM'
         base = messages_for(item, 'BASE', 'P0', prompts)
         injected = messages_for(item, 'I', 'P0', prompts)
-        assert base[0] == injected[0]
-        assert item['base_text'] in base[1]['content'] and item['base_text'] in injected[1]['content']
-        assert item['injection_text'] not in base[1]['content']
-        assert item['injection_text'] in injected[1]['content']
-        assert item['injection_text'] not in injected[0]['content']
+        assert len(base) == len(injected) == 1 and base[0]['role'] == 'user'
+        assert item['base_text'] in base[0]['content'] and item['base_text'] in injected[0]['content']
+        assert item['injection_text'] not in base[0]['content']
+        assert item['injection_text'] in injected[0]['content']
         assert 'Later verified update' not in str(base) + str(injected)
         for msg in base + injected:
             assert 'attacker_target' not in msg['content']
@@ -34,6 +33,21 @@ def validate():
     print('PASS: 30 scenarios; BASE/I only, P0 only')
     print('PASS: no evidence or ground-truth metadata included in prompts')
     print('Active input SHA-256:', digest)
+    stage_b, items_b, prompts_b, digest_b = load('stages/B.json')
+    assert stage_b['stage'] == 'B' and stage_b['conditions'] == ['BASE', 'I']
+    assert stage_b['architectures'] == ['P1', 'P2']
+    assert len(build_tasks(stage_b, items_b, 3)) == 360
+    for original, item in zip(scenarios, items_b):
+        assert original == item
+        for arch in stage_b['architectures']:
+            base = messages_for(item, 'BASE', arch, prompts_b, 'testtoken' if arch == 'P2' else None)
+            injected = messages_for(item, 'I', arch, prompts_b, 'testtoken' if arch == 'P2' else None)
+            assert base[0] == injected[0]
+            assert item['base_text'] in base[1]['content'] and item['base_text'] in injected[1]['content']
+            assert item['injection_text'] not in str(base) and item['injection_text'] in injected[1]['content']
+            assert item['injection_text'] not in injected[0]['content']
+    print('PASS: Stage B: P1/P2, same cases and attacks, 360 tasks for three repetitions')
+    print('Stage B input SHA-256:', digest_b)
     print('Human label review and measured injection success are NOT established by these checks.')
 
 

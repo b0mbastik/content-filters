@@ -5,6 +5,7 @@ import hashlib
 import json
 import random
 import re
+import secrets
 
 from project import ROOT, correct_label, load, messages_for
 
@@ -30,7 +31,7 @@ def build_tasks(stage, scenarios, repetitions, limit=0):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--stage', default='stages/A.json')
-    parser.add_argument('--out', default='results/stage-a.jsonl')
+    parser.add_argument('--out', help='Output JSONL (defaults to results/stage-<stage>.jsonl)')
     parser.add_argument('--reps', type=int, default=3)
     parser.add_argument('--limit', type=int, default=0, help='Maximum number of scenarios')
     parser.add_argument('--temperature', type=float, default=0.7)
@@ -45,26 +46,35 @@ def main():
         raise SystemExit('No tasks found')
     if args.dry_run:
         first = tasks[0][0]
-        preview = [(first, cond, stage['architectures'][0], 1) for cond in stage['conditions']]
+        preview = [(first, cond, arch, 1) for arch in stage['architectures']
+                   for cond in stage['conditions']]
         for item, condition, arch, rep in preview:
             print(json.dumps({'scenario_id': item['id'], 'condition': condition,
-                              'architecture': arch, 'messages': messages_for(item, condition, arch, prompts)},
+                              'architecture': arch, 'messages': messages_for(item, condition, arch, prompts, 'preview' if arch == 'P2' else None)},
                              indent=2))
         print(f'Total tasks: {len(tasks)}')
         return
 
-    output = ROOT / args.out
+    output = ROOT / (args.out or f"results/stage-{stage['stage'].lower()}.jsonl")
     output.parent.mkdir(parents=True, exist_ok=True)
     settings = {'stage': stage['stage'], 'source_sha256': digest,
-                'model': 'Qwen3-14B', 'temperature': args.temperature,
+                'design': 'protection-layers-v2', 'model': 'Qwen3-14B', 'temperature': args.temperature,
                 'top_p': args.top_p, 'max_new_tokens': 24}
-    # Store shared settings and each distinct prompt once beside the result file.
+    # Persist a random token per case/repetition, shared across BASE and I.
     metadata_path = output.with_suffix(output.suffix + '.meta.json')
+    existing_metadata = json.loads(metadata_path.read_text(encoding='utf-8')) if metadata_path.exists() else None
+    nonce_keys = {f"{item['category_id']}/{item['id']}/{rep}"
+                  for item, _, arch, rep in tasks if arch == 'P2'}
+    nonces = existing_metadata.get('nonces', {}) if existing_metadata else {
+        key: secrets.token_hex(16) for key in sorted(nonce_keys)}
+    if set(nonces) != nonce_keys:
+        raise SystemExit('Existing metadata has different session tokens or tasks; change --out')
     prompt_snapshot = {}
-    for item, condition, arch, _ in tasks:
-        prompt_key = f"{item['category_id']}/{item['id']}/{condition}/{arch}"
-        prompt_snapshot[prompt_key] = messages_for(item, condition, arch, prompts)
-    metadata = {'settings': settings, 'prompts': prompt_snapshot}
+    for item, condition, arch, rep in tasks:
+        prompt_key = f"{item['category_id']}/{item['id']}/{condition}/{arch}/{rep}"
+        nonce = nonces.get(f"{item['category_id']}/{item['id']}/{rep}") if arch == 'P2' else None
+        prompt_snapshot[prompt_key] = messages_for(item, condition, arch, prompts, nonce)
+    metadata = {'settings': settings, 'nonces': nonces, 'prompts': prompt_snapshot}
     already = {}
     if output.exists() and output.stat().st_size:
         if not metadata_path.exists():
@@ -96,7 +106,8 @@ def main():
     with output.open('a', encoding='utf-8') as stream:
         for index, (item, condition, arch, rep) in enumerate(tasks, start=1):
             key = (item['category_id'], item['id'], condition, arch, rep)
-            messages = messages_for(item, condition, arch, prompts)
+            nonce = nonces.get(f"{item['category_id']}/{item['id']}/{rep}") if arch == 'P2' else None
+            messages = messages_for(item, condition, arch, prompts, nonce)
             if key in already:
                 continue
             # Matched BASE and I (and later architectures) share a reproducible repetition seed.
