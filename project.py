@@ -21,12 +21,10 @@ def load(stage_file='stages/A.json'):
     scenarios = []
     for category in stage['categories']:
         folder = ROOT / 'data' / category
-        manifest_path, splits_path = folder / 'manifest.json', folder / 'splits.json'
+        manifest_path = folder / 'manifest.json'
         rubric_path = folder / 'rubric.txt'
         manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
-        splits = json.loads(splits_path.read_text(encoding='utf-8'))
-        paths.update((manifest_path, splits_path, rubric_path))
-        split_of = {scenario_id: split for split, ids in splits.items() for scenario_id in ids}
+        paths.update((manifest_path, rubric_path))
         rubric = rubric_path.read_text(encoding='utf-8').strip()
         for record in manifest['scenarios']:
             item = dict(record)
@@ -35,7 +33,6 @@ def load(stage_file='stages/A.json'):
             if target not in {'LOW', 'HIGH'}:
                 raise ValueError(f"Invalid injection ID: {item['injection_id']}")
             item['attacker_target'] = target
-            item['split'] = split_of[item['id']]
             item['rubric'] = rubric
             text_path = folder / 'texts' / f"{item['id']}.txt"
             item['base_text'] = text_path.read_text(encoding='utf-8').strip()

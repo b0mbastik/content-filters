@@ -18,9 +18,8 @@ def parse_label(raw):
     return 'OTHER'
 
 
-def build_tasks(stage, scenarios, split, repetitions, limit=0):
-    selected = [s for s in scenarios if split == 'all' or s['split'] == split]
-    selected = selected[:limit or None]
+def build_tasks(stage, scenarios, repetitions, limit=0):
+    selected = scenarios[:limit or None]
     tasks = [(s, condition, arch, repetition)
              for s in selected for condition in stage['conditions']
              for arch in stage['architectures'] for repetition in range(1, repetitions + 1)]
@@ -31,8 +30,7 @@ def build_tasks(stage, scenarios, split, repetitions, limit=0):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--stage', default='stages/A.json')
-    parser.add_argument('--split', choices=['development', 'evaluation', 'all'], default='development')
-    parser.add_argument('--out', default='results/stage-a-development.jsonl')
+    parser.add_argument('--out', default='results/stage-a.jsonl')
     parser.add_argument('--reps', type=int, default=3)
     parser.add_argument('--limit', type=int, default=0, help='Maximum number of scenarios')
     parser.add_argument('--temperature', type=float, default=0.7)
@@ -42,9 +40,9 @@ def main():
     if args.reps < 1 or args.limit < 0 or args.temperature < 0 or not 0 < args.top_p <= 1:
         parser.error('Invalid sampling or count argument')
     stage, scenarios, prompts, digest = load(args.stage)
-    tasks = build_tasks(stage, scenarios, args.split, args.reps, args.limit)
+    tasks = build_tasks(stage, scenarios, args.reps, args.limit)
     if not tasks:
-        raise SystemExit('No tasks matched the selected split')
+        raise SystemExit('No tasks found')
     if args.dry_run:
         first = tasks[0][0]
         preview = [(first, cond, stage['architectures'][0], 1) for cond in stage['conditions']]
@@ -57,7 +55,7 @@ def main():
 
     output = ROOT / args.out
     output.parent.mkdir(parents=True, exist_ok=True)
-    settings = {'stage': stage['stage'], 'split_requested': args.split, 'source_sha256': digest,
+    settings = {'stage': stage['stage'], 'source_sha256': digest,
                 'model': 'Qwen3-14B', 'temperature': args.temperature,
                 'top_p': args.top_p, 'max_new_tokens': 24}
     # Store shared settings and each distinct prompt once beside the result file.
@@ -117,7 +115,7 @@ def main():
                 result = model.generate(**encoded, **arguments)
             raw = tokenizer.decode(result[0, encoded['input_ids'].shape[-1]:], skip_special_tokens=True)
             row = {'category_id': item['category_id'], 'scenario_id': item['id'],
-                   'split': item['split'], 'condition': condition, 'architecture': arch,
+                   'condition': condition, 'architecture': arch,
                    'repetition': rep, 'injection_id': item['injection_id'],
                    'attacker_target': item['attacker_target'],
                    'expected_label': correct_label(item, condition),

@@ -14,19 +14,15 @@ class StageATests(unittest.TestCase):
     def setUpClass(cls):
         cls.stage, cls.items, cls.prompts, cls.source_hash = load()
 
-    def test_stage_and_split(self):
+    def test_stage_and_scenarios(self):
         self.assertEqual(self.stage['conditions'], ['BASE', 'I'])
         self.assertEqual(self.stage['architectures'], ['P0'])
         self.assertEqual(len(self.items), 30)
-        self.assertEqual(Counter(item['split'] for item in self.items),
-                         {'development': 12, 'evaluation': 18})
         self.assertEqual({item['base_label'] for item in self.items}, {'MEDIUM'})
         self.assertEqual(Counter(item['attacker_target'] for item in self.items),
                          {'LOW': 15, 'HIGH': 15})
         self.assertEqual(len({item['injection_id'] for item in self.items}), 12)
-        self.assertEqual(len({item['injection_id'] for item in self.items if item['split'] == 'development'}), 12)
-        self.assertEqual(len(build_tasks(self.stage, self.items, 'development', 3)), 72)
-        self.assertEqual(len(build_tasks(self.stage, self.items, 'evaluation', 3)), 108)
+        self.assertEqual(len(build_tasks(self.stage, self.items, 3)), 180)
 
     def test_no_evidence_or_ground_truth_in_prompt(self):
         for item in self.items:
@@ -45,8 +41,8 @@ class StageATests(unittest.TestCase):
             self.assertEqual(item['injection_id'].split('-')[0], item['attacker_target'])
 
     def test_reproducible_task_order(self):
-        a = build_tasks(self.stage, self.items, 'development', 2)
-        b = build_tasks(self.stage, self.items, 'development', 2)
+        a = build_tasks(self.stage, self.items, 2)
+        b = build_tasks(self.stage, self.items, 2)
         self.assertEqual([(i['id'], c, p, r) for i, c, p, r in a],
                          [(i['id'], c, p, r) for i, c, p, r in b])
 

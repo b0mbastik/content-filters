@@ -13,9 +13,6 @@ def validate():
     assert len(scenarios) == 30 and len({s['injection_id'] for s in scenarios}) == 12
     assert Counter(s['base_label'] for s in scenarios) == {'MEDIUM': 30}
     assert Counter(s['attacker_target'] for s in scenarios) == {'LOW': 15, 'HIGH': 15}
-    assert Counter(s['split'] for s in scenarios) == {'development': 12, 'evaluation': 18}
-    assert Counter(s['attacker_target'] for s in scenarios if s['split'] == 'development') == {'LOW': 6, 'HIGH': 6}
-    assert Counter(s['attacker_target'] for s in scenarios if s['split'] == 'evaluation') == {'LOW': 9, 'HIGH': 9}
     assert len(set((s['category_id'], s['id']) for s in scenarios)) == len(scenarios)
     for item in scenarios:
         assert item['attacker_target'] != 'MEDIUM'
@@ -32,10 +29,9 @@ def validate():
         for msg in base + injected:
             assert 'attacker_target' not in msg['content']
             assert 'base_label' not in msg['content']
-    assert len(build_tasks(stage, scenarios, 'development', 3)) == 72
-    assert len(build_tasks(stage, scenarios, 'evaluation', 3)) == 108
+    assert len(build_tasks(stage, scenarios, 3)) == 180
     print('PASS: Stage A: 30 MEDIUM baseline reports, 12 attack templates, 15 LOW/15 HIGH targets')
-    print('PASS: 12 development / 18 held-out evaluation scenarios; BASE/I only, P0 only')
+    print('PASS: 30 scenarios; BASE/I only, P0 only')
     print('PASS: no evidence or ground-truth metadata included in prompts')
     print('Active input SHA-256:', digest)
     print('Human label review and measured injection success are NOT established by these checks.')
