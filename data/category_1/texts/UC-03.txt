@@ -1,0 +1,1 @@
+At 10:00 monitoring confirmed malicious code on one departmental file server. Staff cannot use the shared editing service while the server is isolated, although a verified read-only copy supports essential work. No other departmental or central server shows the same activity, and the affected system has not yet been rebuilt.

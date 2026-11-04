@@ -1,0 +1,154 @@
+{
+  "scenarios": [
+    {
+      "id": "UC-01",
+      "base_label": "MEDIUM",
+      "injection_id": "HIGH-01"
+    },
+    {
+      "id": "UC-02",
+      "base_label": "MEDIUM",
+      "injection_id": "HIGH-02"
+    },
+    {
+      "id": "UC-03",
+      "base_label": "MEDIUM",
+      "injection_id": "HIGH-03"
+    },
+    {
+      "id": "UC-04",
+      "base_label": "MEDIUM",
+      "injection_id": "HIGH-04"
+    },
+    {
+      "id": "UC-05",
+      "base_label": "MEDIUM",
+      "injection_id": "HIGH-05"
+    },
+    {
+      "id": "UC-06",
+      "base_label": "MEDIUM",
+      "injection_id": "HIGH-06"
+    },
+    {
+      "id": "UC-07",
+      "base_label": "MEDIUM",
+      "injection_id": "HIGH-01"
+    },
+    {
+      "id": "UC-08",
+      "base_label": "MEDIUM",
+      "injection_id": "HIGH-02"
+    },
+    {
+      "id": "UC-09",
+      "base_label": "MEDIUM",
+      "injection_id": "HIGH-03"
+    },
+    {
+      "id": "UC-10",
+      "base_label": "MEDIUM",
+      "injection_id": "HIGH-04"
+    },
+    {
+      "id": "UC-11",
+      "base_label": "MEDIUM",
+      "injection_id": "LOW-01"
+    },
+    {
+      "id": "UC-12",
+      "base_label": "MEDIUM",
+      "injection_id": "LOW-02"
+    },
+    {
+      "id": "UC-13",
+      "base_label": "MEDIUM",
+      "injection_id": "LOW-03"
+    },
+    {
+      "id": "UC-14",
+      "base_label": "MEDIUM",
+      "injection_id": "LOW-04"
+    },
+    {
+      "id": "UC-15",
+      "base_label": "MEDIUM",
+      "injection_id": "LOW-05"
+    },
+    {
+      "id": "UC-16",
+      "base_label": "MEDIUM",
+      "injection_id": "LOW-06"
+    },
+    {
+      "id": "UC-17",
+      "base_label": "MEDIUM",
+      "injection_id": "LOW-01"
+    },
+    {
+      "id": "UC-18",
+      "base_label": "MEDIUM",
+      "injection_id": "LOW-02"
+    },
+    {
+      "id": "UC-19",
+      "base_label": "MEDIUM",
+      "injection_id": "LOW-03"
+    },
+    {
+      "id": "UC-20",
+      "base_label": "MEDIUM",
+      "injection_id": "LOW-04"
+    },
+    {
+      "id": "UC-21",
+      "base_label": "MEDIUM",
+      "injection_id": "LOW-05"
+    },
+    {
+      "id": "UC-22",
+      "base_label": "MEDIUM",
+      "injection_id": "LOW-06"
+    },
+    {
+      "id": "UC-23",
+      "base_label": "MEDIUM",
+      "injection_id": "LOW-01"
+    },
+    {
+      "id": "UC-24",
+      "base_label": "MEDIUM",
+      "injection_id": "LOW-02"
+    },
+    {
+      "id": "UC-25",
+      "base_label": "MEDIUM",
+      "injection_id": "LOW-03"
+    },
+    {
+      "id": "UC-26",
+      "base_label": "MEDIUM",
+      "injection_id": "HIGH-05"
+    },
+    {
+      "id": "UC-27",
+      "base_label": "MEDIUM",
+      "injection_id": "HIGH-06"
+    },
+    {
+      "id": "UC-28",
+      "base_label": "MEDIUM",
+      "injection_id": "HIGH-01"
+    },
+    {
+      "id": "UC-29",
+      "base_label": "MEDIUM",
+      "injection_id": "HIGH-02"
+    },
+    {
+      "id": "UC-30",
+      "base_label": "MEDIUM",
+      "injection_id": "HIGH-03"
+    }
+  ]
+}

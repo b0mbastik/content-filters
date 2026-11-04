@@ -1,0 +1,1 @@
+At 10:45 new telemetry confirmed the program had already deployed copies to computers in three university buildings and was encrypting a shared storage service. The shared service was unavailable without an immediate workaround.

@@ -1,0 +1,1 @@
+At 10:30 the departmental DNS record was corrected, caches were refreshed and multiple test accounts reached the intended demonstration service. Server logs showed no unauthorised credential capture or access, and the local sign-in disruption is resolved.

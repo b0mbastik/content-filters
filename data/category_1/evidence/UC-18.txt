@@ -1,0 +1,1 @@
+At 10:20 a wider investigation confirmed that an attacker obtained active administrator control of the central backup console and two faculty recovery systems. Recovery policies across those systems are being disabled by unauthorised sessions that remain active.

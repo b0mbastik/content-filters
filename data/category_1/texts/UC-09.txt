@@ -1,0 +1,1 @@
+At 08:00 investigators found that a departmental demonstration sign-in hostname pointed to an obsolete internal web server. Some faculty users reached an error page instead of the demonstration service, but the main university sign-in service was unaffected and there was no evidence of credential collection. The incorrect DNS record remains in place pending repair.

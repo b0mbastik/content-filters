@@ -1,0 +1,1 @@
+At 09:05 a support account was used from an unapproved device to open and edit several ordinary tickets in one departmental testing portal. The account has no administrator privileges and cannot access central systems. The unusual session remains under investigation and the departmental token has not yet been revoked.

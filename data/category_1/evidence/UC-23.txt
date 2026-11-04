@@ -1,0 +1,1 @@
+At 12:15 investigators discovered that the underlying access-control error also exposed a separate container of student identity documents to unauthenticated internet users. The endpoint remained publicly reachable during testing.

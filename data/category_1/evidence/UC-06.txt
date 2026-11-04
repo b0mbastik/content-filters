@@ -1,0 +1,1 @@
+At 10:50 administrators restored department-only access, checked permissions using unrelated staff accounts and reviewed download logs. No unauthorised exports were detected, and the scheduling portal is operating with verified restrictions and no remaining exposure.

@@ -1,0 +1,1 @@
+At 09:40 administrators confirmed unauthorised use of a read-only account for one department's backup dashboard. The account can view local backup job status but cannot edit recovery policies or access other departments. The credential is still valid, and automated exports are temporarily paused while staff maintain verified manual copies.

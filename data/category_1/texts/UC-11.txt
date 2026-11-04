@@ -1,0 +1,1 @@
+At 09:00 a forged password-reset message reached one faculty mailbox and the recipient entered a password on the linked page. Multifactor authentication blocked subsequent login attempts, but the password reset has not yet been completed. No other account or privileged service is known to be affected.

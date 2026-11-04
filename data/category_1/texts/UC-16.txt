@@ -1,0 +1,1 @@
+At 09:00 the TLS certificate for one faculty booking component expired, causing intermittent student booking sign-in failures. An approved alternative booking form is available, and the main student-services portal remains functional. The certificate and local route configuration are still awaiting repair.

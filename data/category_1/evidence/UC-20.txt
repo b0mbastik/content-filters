@@ -1,0 +1,1 @@
+At 11:30 forensic logs confirmed that an attacker compromised the test mail host, used a stored service credential to gain administrator access to two central mail servers, and is actively redirecting messages between departments. Those unauthorised privileged sessions remain open.

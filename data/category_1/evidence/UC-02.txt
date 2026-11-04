@@ -1,0 +1,1 @@
+At 10:45 administrators limited the folder to its authorised advisers, verified permissions with test accounts and reviewed access logs. No unexpected document access was found. The over-broad access has ended and no unresolved exposure remains.

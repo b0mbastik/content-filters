@@ -1,0 +1,1 @@
+At 12:10 the department restored the server from a verified clean image, patched the entry point and tested normal editing and file access. Endpoint monitoring shows no malicious process or further spread, and all users have regained normal service.

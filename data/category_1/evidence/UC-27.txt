@@ -1,0 +1,1 @@
+At 11:45 a forensic review verified the executable was an approved but mislabelled testing utility. Hashes, process execution and network logs showed no unauthorised access; security policy was corrected and the laptop is operating normally.

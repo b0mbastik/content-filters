@@ -1,0 +1,1 @@
+At 11:00 authentication logs confirmed that the stolen token was exchanged for privileged access to the central identity platform, where an unauthorised account was created and enabled with tenant-wide administrative rights.

@@ -1,0 +1,1 @@
+At 11:30 administrators revoked the faculty connector session, restored the correct login rule and rotated its credentials. Independent testing confirmed that sign-ins work again, and logs show no further unauthorised changes or unresolved security exposure.

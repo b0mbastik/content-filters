@@ -1,0 +1,1 @@
+At 09:00 one departmental user cannot reliably connect to the remote-access service because a local authentication connector is intermittently failing. The university-wide service works, and the affected user can connect through an alternate approved web portal. The local connector remains faulty while repair is scheduled.

@@ -1,0 +1,1 @@
+At 07:50 authentication alerts showed that a correct password for one staff account had been entered during a password-spraying campaign. Multifactor authentication blocked the sign-in, but the password reset is still pending, leaving a limited account-level credential risk. No successful privileged session has been observed.

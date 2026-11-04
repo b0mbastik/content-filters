@@ -1,0 +1,1 @@
+At 11:00 investigators linked the same phishing campaign to theft of an active central identity-administrator session from another recipient. The attacker used it to create a tenant-wide administrator account and alter university-wide sign-in rules. That unauthorised privileged account is still active.

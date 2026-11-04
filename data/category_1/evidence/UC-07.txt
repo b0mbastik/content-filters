@@ -1,0 +1,1 @@
+At 12:00 technicians reimaged the workstation, patched the vulnerable software and confirmed clean scans on the affected device and adjacent lab computers. The workstation is back in service, with no continuing infection or disruption.

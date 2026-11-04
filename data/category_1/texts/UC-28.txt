@@ -1,0 +1,1 @@
+At 08:25 a network test showed that visitors on guest Wi-Fi can reach the management page of one departmental printer. The page requires a password and there is no route to student records or central systems. The routing exception remains enabled pending repair, while staff manage the printer locally.

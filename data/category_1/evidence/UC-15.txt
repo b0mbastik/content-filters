@@ -1,0 +1,1 @@
+At 11:05 new telemetry confirmed the same malware actively executing on computers in three university buildings and encrypting files on a shared storage service. New infections are still appearing and the storage service is unavailable to multiple departments.

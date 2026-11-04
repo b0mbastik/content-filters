@@ -1,0 +1,1 @@
+At 10:40 engineers removed the printer routing exception, tested the guest network from several access points, and confirmed no guest route to internal management interfaces remains. The page had required authentication throughout, and no access was recorded.

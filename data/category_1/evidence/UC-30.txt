@@ -1,0 +1,1 @@
+At 11:25 the password and multifactor factors were reset, all sessions revoked and the affected account restored under the owner’s control. Audited records show no downloads, changes or continued access, and no unresolved exposure remains.

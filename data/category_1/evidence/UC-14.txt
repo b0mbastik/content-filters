@@ -1,0 +1,1 @@
+At 10:10 investigators confirmed that the attacker reused the same credential on a legacy administrator gateway that lacked multifactor authentication. It granted an active tenant-wide privileged identity session, which is currently being used to modify central sign-in policies.

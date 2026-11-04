@@ -1,0 +1,1 @@
+At 11:15 the dashboard credential was revoked and replaced, access logs were reviewed and automatic backup exports resumed. A test restoration succeeded, manual copies were reconciled and no further unauthorised access or backup gap remains.

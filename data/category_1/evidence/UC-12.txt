@@ -1,0 +1,1 @@
+At 10:30 forensic logs confirmed that an attacker exploited the same management service on three production servers across separate departments. Malicious administrator sessions remain active on those servers and are being used to alter shared application settings.

@@ -1,0 +1,1 @@
+At 08:35 a permissions review found that a staff scheduling portal allowed several authenticated employees outside one department to read that department's work-roster reports. No bank details, identity documents or sensitive personal records are present, and the portal is not publicly accessible. The internal permission error remains active.

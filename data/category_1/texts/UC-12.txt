@@ -1,0 +1,1 @@
+At 08:30 a routine vulnerability scan found an unintended firewall exception making the management login page of one departmental development server reachable from campus Wi-Fi. Authentication is still required, and network segmentation separates the server from sensitive services. The exception remains in place; no unauthorised access has yet been confirmed.

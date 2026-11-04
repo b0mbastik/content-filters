@@ -1,0 +1,1 @@
+At 11:35 forensic logs confirmed remote code execution through that plugin. The attacker used a production database credential to export protected student records, and an unauthorised process remains active on both the faculty application server and a central database server.

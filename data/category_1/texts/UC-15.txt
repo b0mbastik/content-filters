@@ -1,0 +1,1 @@
+At 08:40 endpoint telemetry detected malware executing from an email attachment on one library workstation. Endpoint controls isolated the computer and a replacement desk is available. The workstation has not yet been rebuilt, but no other device or central service has matching malicious activity.

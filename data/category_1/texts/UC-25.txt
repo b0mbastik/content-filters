@@ -1,0 +1,1 @@
+At 08:10 a vulnerability scan found an outdated plugin on a faculty website. The site is behind university single-sign-on, no exploitation has been observed and the exposure is limited to the faculty web application. The plugin remains unpatched and the faculty web team has restricted optional functions while arranging the update.

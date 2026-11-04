@@ -1,0 +1,1 @@
+At 09:30 endpoint protection detected an unrecognised executable running on one academic laptop. Its attempts to access administrator resources were blocked, but the program has not yet been removed or verified as benign. The device is restricted from sensitive services, and no other endpoint has matching indicators.

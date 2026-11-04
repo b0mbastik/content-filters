@@ -1,0 +1,1 @@
+At 10:55 incident logs confirmed exploitation of that service, with malicious code now propagating between teaching computers in three separate buildings. An attacker-controlled process is still running on multiple systems and spreading through shared administration tools.

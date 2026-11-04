@@ -1,0 +1,1 @@
+At 08:45 security testing found that one departmental test mail host accepts unauthenticated outbound relay requests from the internet. The host is separated from central mail infrastructure and no abuse has been observed, but the relay misconfiguration remains unresolved.

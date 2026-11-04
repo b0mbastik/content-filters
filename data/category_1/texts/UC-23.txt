@@ -1,0 +1,1 @@
+At 10:00 a shared-storage permissions mistake allows any authenticated university user to view one course folder containing teaching materials. The folder holds no personal information and has no external-public access. The broad internal access remains enabled until the course administrator updates the folder permissions.

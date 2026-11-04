@@ -1,0 +1,1 @@
+At 11:25 deeper audit logs confirmed that the same attacker holds active administrator sessions on both the central purchasing platform and the university finance system. Supplier payment settings have been changed across several faculties, and the unauthorised privileged sessions have not been revoked.

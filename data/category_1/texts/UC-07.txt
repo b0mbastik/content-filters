@@ -1,0 +1,1 @@
+At 09:25 endpoint monitoring confirmed malware running on one teaching-lab workstation. Technicians disconnected that computer and moved its classes to spare devices. No other computer or shared service shows the malicious activity, but the infected workstation still requires a clean rebuild and verification.

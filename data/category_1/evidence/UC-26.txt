@@ -1,0 +1,1 @@
+At 10:50 engineers removed the unauthorised demonstration alias, confirmed that public and internal DNS records resolve only to approved endpoints, and verified that no client had connected to a fraudulent service. The configuration is restored with no unresolved exposure.

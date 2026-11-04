@@ -1,0 +1,1 @@
+At 07:40 authentication logs confirmed an unauthorised sign-in to a departmental VPN account serving one laboratory subnet. Segmentation prevents this account from reaching central university networks, and there is no sign of access outside the laboratory. The session is still open while the laboratory uses restricted local access.

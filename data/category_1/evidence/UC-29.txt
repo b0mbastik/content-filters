@@ -1,0 +1,1 @@
+At 11:15 the connector was repaired and tested with the affected user and monitoring accounts. All normal logins succeeded; the workaround was retired and no residual authentication failures or security exposure remained.

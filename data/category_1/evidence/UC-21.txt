@@ -1,0 +1,1 @@
+At 11:20 audit logs confirmed that the same permissions flaw was exploited to grant a non-staff user active administrator access across the learning platform. The account is still enabled, can alter permissions across faculties, and has already exported restricted student personal records.

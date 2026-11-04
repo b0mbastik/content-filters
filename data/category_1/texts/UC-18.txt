@@ -1,0 +1,1 @@
+At 07:30 backup monitoring found that one departmental research share missed its last three scheduled backups. The original files remain available and staff create verified manual exports, but automated recovery for that share is still unavailable. Central backup services and other departments are operating normally.

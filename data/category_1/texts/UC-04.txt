@@ -1,0 +1,1 @@
+At 09:10 a faculty learning-platform account was mistakenly granted course-administrator rights for a single module and used them to change that module's visibility settings. The account has no institution-wide permissions and cannot access other courses, but its unauthorised course-level privileges remain active while staff review the changes.

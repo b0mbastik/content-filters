@@ -1,0 +1,1 @@
+At 11:40 authentication logs confirmed that the attacker used a linked privileged token to gain active administrator access to the university identity platform and central email environment. Unauthorised sign-in policy changes are ongoing in both systems.

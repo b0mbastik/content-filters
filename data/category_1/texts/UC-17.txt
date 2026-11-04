@@ -1,0 +1,1 @@
+At 08:15 a laboratory audit found eight teaching computers in one segmented room running an unpatched service with a known remote exploit. The service remains enabled while maintenance is arranged. No exploitation has been observed and access to the affected systems is restricted to that laboratory.

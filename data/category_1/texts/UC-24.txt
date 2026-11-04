@@ -1,0 +1,1 @@
+At 09:05 a teaching computer executed an unwanted program after a user opened a downloaded file. Endpoint controls isolated that computer, and no other devices show the same process or network indicators. That workstation remains out of service pending a verified clean rebuild; classes have moved to spare computers.

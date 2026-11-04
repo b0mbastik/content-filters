@@ -1,0 +1,1 @@
+At 11:10 investigation of that component's reverse proxy identified a related route exposing current student disability-support appointment documents without authentication. An external test confirmed that the sensitive personal records are publicly reachable and the route remains enabled.

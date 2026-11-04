@@ -1,0 +1,1 @@
+At 08:40 investigators confirmed that an unknown party signed into one student account and viewed a non-sensitive course page. The account had no administrator privileges and was disabled, but investigators have not yet verified that every existing login session was revoked. The compromise remains limited to that account while a session review is underway.

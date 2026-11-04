@@ -1,0 +1,1 @@
+At 09:15 network engineers removed the routing exception, verified the controller cannot be reached from the guest network and reviewed command logs for unauthorised use. Normal local door management is functioning and there is no remaining exposure.

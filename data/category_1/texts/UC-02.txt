@@ -1,0 +1,1 @@
+At 08:20 an audit found that a faculty course-record folder was readable by any authenticated university staff member instead of only the authorised advisers. The folder contains student enrolment and timetable details but no sensitive identification documents. It is not publicly accessible on the internet, and the overly broad internal access remains enabled pending correction.

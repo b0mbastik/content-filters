@@ -1,0 +1,1 @@
+At 09:00 identity logs identified an unrecognised administrator session for a faculty-managed sign-in connector. The account could alter settings for one faculty portal, and it changed a local login rule; it had no tenant-wide privileges. The session remains active while staff use the ordinary university sign-in route as a workaround.

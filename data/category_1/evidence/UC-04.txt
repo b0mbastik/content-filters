@@ -1,0 +1,1 @@
+At 11:50 the unauthorised course administrator was removed, affected visibility settings were restored and an independent permission review found no further elevated accounts. The module operates normally and there is no remaining unauthorised access.

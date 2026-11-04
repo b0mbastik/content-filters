@@ -1,0 +1,18 @@
+
+# Python environment
+.venv/
+__pycache__/
+*.py[cod]
+
+# Downloaded models and Hugging Face cache
+models/
+hf_cache/
+
+# Generated experiment outputs
+results/
+logs/
+
+# OS and editor files
+.DS_Store
+.vscode/
+.idea/

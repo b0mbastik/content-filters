@@ -1,0 +1,1 @@
+At 09:10 a permissions error allows members of one teaching group to view enrolment lists for a second course. The affected records are limited to course membership, with no sensitive identity documents or administrator privileges accessible. The permissions error remains active while course staff restrict sharing through a separate approved folder.

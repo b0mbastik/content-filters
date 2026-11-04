@@ -1,0 +1,1 @@
+At 06:50 a campus network audit found that authenticated users on a guest network could reach the configuration login page of one teaching-annex door controller. The controller still requires administrator credentials and no unauthorised command was detected. The network routing exception remains open while building staff supervise access locally.

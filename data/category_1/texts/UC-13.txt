@@ -1,0 +1,1 @@
+At 09:15 an accounts-payable review discovered an unauthorised forwarding rule in one departmental purchasing mailbox. It is still forwarding routine vendor invoice-status messages to an outside address. The mailbox has no privileged system access and no payroll or student identity documents were present.

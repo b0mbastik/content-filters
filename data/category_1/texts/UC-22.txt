@@ -1,0 +1,1 @@
+At 08:50 a help-desk account token was used from an unexpected device to open a small number of ordinary support tickets. The account has no administrator privileges and the incident appears confined to the help-desk application. The exposed token is still valid while the support team investigates and temporarily restricts ticket access.

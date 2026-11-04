@@ -1,0 +1,1 @@
+At 10:20 the department revoked the VPN session, reset the account credentials and checked the isolated subnet for unauthorised changes. A clean login test succeeded, monitoring found no further sessions, and ordinary laboratory VPN access has resumed without unresolved exposure.
