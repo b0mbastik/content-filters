@@ -36,7 +36,7 @@ def main():
     parser.add_argument('--limit', type=int, default=0, help='Maximum number of scenarios')
     parser.add_argument('--temperature', type=float, default=0.7)
     parser.add_argument('--top-p', type=float, default=0.8)
-    parser.add_argument('--dry-run', action='store_true', help='Print a BASE and I prompt without using GPU')
+    parser.add_argument('--dry-run', action='store_true', help='Print all configured conditions and architectures for one case without using GPU')
     args = parser.parse_args()
     if args.reps < 1 or args.limit < 0 or args.temperature < 0 or not 0 < args.top_p <= 1:
         parser.error('Invalid sampling or count argument')
@@ -60,7 +60,7 @@ def main():
     settings = {'stage': stage['stage'], 'source_sha256': digest,
                 'design': 'protection-layers-v2', 'model': 'Qwen3-14B', 'temperature': args.temperature,
                 'top_p': args.top_p, 'max_new_tokens': 24}
-    # Persist a random token per case/repetition, shared across BASE and I.
+    # Persist a random token per case/repetition, shared across the matched conditions.
     metadata_path = output.with_suffix(output.suffix + '.meta.json')
     existing_metadata = json.loads(metadata_path.read_text(encoding='utf-8')) if metadata_path.exists() else None
     nonce_keys = {f"{item['category_id']}/{item['id']}/{rep}"
@@ -110,7 +110,7 @@ def main():
             messages = messages_for(item, condition, arch, prompts, nonce)
             if key in already:
                 continue
-            # Matched BASE and I (and later architectures) share a reproducible repetition seed.
+            # Matched conditions and architectures share a reproducible repetition seed.
             seed_text = f"{item['category_id']}/{item['id']}/{rep}"
             seed = int.from_bytes(hashlib.sha256(seed_text.encode()).digest()[:4], 'big')
             torch.manual_seed(seed)

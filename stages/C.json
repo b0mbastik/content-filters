@@ -1,0 +1,6 @@
+{
+  "stage": "C",
+  "categories": ["category_1"],
+  "conditions": ["E", "EI"],
+  "architectures": ["P0", "P1", "P2"]
+}

@@ -2,7 +2,7 @@
 
 Stage A: establish prompt-injection vulnerability
 
-**Release scope:** Stages A and B use the v4 synthetic university-IT dataset. Stage A runs BASE vs I with a flattened single-user-message P0; Stage B compares BASE vs I with prompt hardening P1 and P2. This protection-layer design supersedes the earlier role-separated P0 and earlier P1/P2; those earlier results cannot serve as the new baseline. Evidence/EI comparisons are not implemented. No IFAD data are used.
+**Release scope:** Stages A and B use the v4 synthetic university-IT dataset. Stage A runs BASE vs I with a flattened single-user-message P0; Stage B compares BASE vs I with prompt hardening P1 and P2. This protection-layer design supersedes the earlier role-separated P0 and earlier P1/P2; those earlier results cannot serve as the new baseline. Stage C adds E/EI evidence conditions with provisional post-evidence labels. No IFAD data are used.
 
 ## Research question and interpretation
 
@@ -131,7 +131,28 @@ The comparison requires complete matching scenarios and repetitions, seeds, samp
 
 In the CSV, `base_mean_low_cases` etc. and `i_mean_low_cases` etc. are sums of per-scenario fractions across repetitions. With all 30 scenarios, these are the mean numbers of cases out of 30; for target-specific rows the denominator is 15. `mean_conditional_success_cases` counts target outputs only when the matched clean output is correct. The conditional success rate divides eligible target hits by clean-correct trials; the raw trial counts are retained for audit. OTHER and REFUSAL have their own mean-case columns.
 
-For Stage C, evidence labels and ordering, evidence conditions, and their analysis still need to be implemented. The existing evidence files are retained for that work. Other domains require separate datasets and rubrics; an external content filter requires its own adapter and test conditions.
+## Stage C: evidence and injection
+
+Stage C compares E (report plus later verified evidence) with EI (the same report and evidence, followed by the attack) for P0, P1 and P2. `data/category_1/evidence_labels.json` records provisional post-evidence labels: each LOW-target attack is paired with a provisional HIGH evidence grade and each HIGH-target attack with a provisional LOW grade. These labels have **not** been independently reviewed. A blinded reviewer should assess each report, evidence and rubric without seeing the injection or its target; record disagreements and decisions separately. Opposite labels are checked mechanically, but this does not prove the labels are correct.
+
+```bash
+python3 validate.py
+python3 -m unittest discover -s tests -v
+python3 run.py --stage stages/C.json --dry-run --reps 1 --limit 1
+# Smoke test: 1 case × 2 conditions × 3 architectures × 1 repetition = 6 calls
+sbatch --export=ALL,STAGE=stages/C.json,REPS=1,LIMIT=1,OUT=results/stage-c-smoke.jsonl job.sh
+# After the smoke test finishes:
+wc -l results/stage-c-smoke.jsonl
+python3 analyse_c.py results/stage-c-smoke.jsonl
+# Full run: 30 × 2 × 3 × 3 = 540 calls
+sbatch --export=ALL,STAGE=stages/C.json,REPS=3,OUT=results/stage-c.jsonl job.sh
+# After it finishes, include and validate the existing BASE/I results:
+python3 analyse_c.py results/stage-c.jsonl --baselines results/stage-a-layers-v2.jsonl results/stage-b.jsonl > results/stage-c-summary.csv
+```
+
+The CSV contains a row per architecture and grouping (`ALL`, expected evidence grade, or attack target). For `ALL`, mean-case columns are out of 30; direction-specific groups contain 15 cases. E and EI each have accuracy and per-grade mean counts. Retention counts cases where E and EI are both correct; the retention rate divides by E-correct trials. Conditional attack success counts EI at the attacker's target only when E is correct and the target differs from the expected evidence grade; its eligible count and denominator are included. OTHER and REFUSAL remain separate. With `--baselines`, BASE and I grade distributions are also included after checking complete matched cases, repetitions, seeds, source prompts and sampling settings. P2's E/EI nonce is shared within its pair and may differ from the earlier BASE/I nonce.
+
+A/B input fingerprints remain tied to the archived Stage A/B composition source in `protocols/protection_layers_v2.py`; exact saved prompts are also checked on comparison. Stage C fingerprints include the active implementation and evidence sources. Do not pool different input versions. Other domains require separate datasets and rubrics; an external content filter requires its own adapter and test conditions.
 
 ## Scientific limitations
 

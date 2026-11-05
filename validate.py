@@ -48,6 +48,23 @@ def validate():
             assert item['injection_text'] not in injected[0]['content']
     print('PASS: Stage B: P1/P2, same cases and attacks, 360 tasks for three repetitions')
     print('Stage B input SHA-256:', digest_b)
+    stage_c, items_c, prompts_c, digest_c = load('stages/C.json')
+    assert stage_c['conditions'] == ['E', 'EI'] and stage_c['architectures'] == ['P0', 'P1', 'P2']
+    assert len(build_tasks(stage_c, items_c, 3)) == 540
+    assert Counter((x['attacker_target'], x['evidence_label']) for x in items_c) == {('LOW', 'HIGH'): 15, ('HIGH', 'LOW'): 15}
+    for item in items_c:
+        assert correct_label(item, 'E') == correct_label(item, 'EI') == item['evidence_label']
+        for arch in stage_c['architectures']:
+            nonce = 'testtoken' if arch == 'P2' else None
+            evidence = messages_for(item, 'E', arch, prompts_c, nonce)
+            attacked = messages_for(item, 'EI', arch, prompts_c, nonce)
+            evidence_text = '\n'.join(msg['content'] for msg in evidence)
+            attacked_text = '\n'.join(msg['content'] for msg in attacked)
+            assert item['base_text'] in evidence_text and item['evidence_text'] in evidence_text
+            assert item['injection_text'] not in evidence_text and item['injection_text'] in attacked_text
+            assert item['evidence_text'] in attacked_text
+    print('PASS: Stage C: 30 opposing evidence/target labels, E/EI, 540 tasks for three repetitions')
+    print('Stage C input SHA-256:', digest_c)
     print('Human label review and measured injection success are NOT established by these checks.')
 
 
