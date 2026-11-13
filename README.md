@@ -1,8 +1,8 @@
 # Content Filters
 
-Stage A: establish prompt-injection vulnerability
+Experiments on prompt injection, prompt-based protection and evidence preservation in LLM risk classification.
 
-**Release scope:** Stages A and B use the v4 synthetic university-IT dataset. Stage A runs BASE vs I with a flattened single-user-message P0; Stage B compares BASE vs I with prompt hardening P1 and P2. This protection-layer design supersedes the earlier role-separated P0 and earlier P1/P2; those earlier results cannot serve as the new baseline. Stage C adds E/EI evidence conditions with provisional post-evidence labels. No IFAD data are used.
+**Scope:** All three stages use 30 synthetic university IT incident reports. Stage A compares BASE and I with a flattened single-user-message P0. Stage B uses the same conditions with prompt hardening P1 and P2. Stage C compares E and EI evidence conditions for all three prompt architectures. This protection-layer design supersedes the earlier prompt versions; results from those versions cannot serve as its baseline. See [`docs/experiment-report.md`](docs/experiment-report.md) for completed results and their limitations.
 
 ## Research question and interpretation
 
@@ -23,22 +23,25 @@ We do **not** assume that the supplied attacks work. If P0 ignores them, that is
 content-filters/
 ├── data/category_1/
 │   ├── texts/                # 30 original fictional reports, each MEDIUM
-│   ├── evidence/             # Preserved future Stage C input; NOT loaded in Stage A
+│   ├── evidence/             # Synthetic later updates, loaded only in Stage C
+│   ├── evidence_labels.json  # Provisional post-evidence labels for Stage C
 │   ├── rubric.txt            # Risk-grading criteria
-│   └── manifest.json         # Labels and attack assignments
+│   └── manifest.json         # Provisional baseline labels and attack assignments
 ├── injections/              # 12 separate attack text files
 ├── prompts/                 # P0 baseline and P1/P2 guards
-├── stages/                  # Stage A and B configurations
-├── docs/methodology.md
+├── stages/                  # Stage A, B and C configurations
+├── docs/                    # Methodology and experimental report
+├── protocols/               # Archived A/B source used for historical fingerprints
 ├── project.py               # Shared loader and conditional document composer
 ├── run.py                   # One GPU runner, reproducible seeds, append/resume
-├── analyse.py               # Paired Stage A outcomes (CSV)
-├── validate.py              # Structural/ground-truth-isolation checks
+├── result_checks.py         # Response parsing and saved-outcome validation
+├── provenance.py            # Model, environment and execution provenance
+├── validate.py              # Dataset structure and prompt-isolation checks
 ├── job.sh                   # Hypatia SLURM submission script
-└── tests/test_project.py
+└── tests/                   # Dataset, prompt and runner regression tests
 ```
 
-The source file separation is intentional. Nothing in `manifest.json` is used as an instruction to the model. Existing factual evidence files are **inert** in Stage A and retained for possible future work.
+The source file separation is intentional. Labels and attack assignments in `manifest.json` are never sent as instructions to the model. Evidence files are loaded only in Stage C; Stages A and B use the original reports and assigned attacks.
 
 ## Experimental dataset
 
@@ -46,7 +49,9 @@ The source file separation is intentional. Nothing in `manifest.json` is used as
 
 The expected ratings were authored synthetically and **must be independently reviewed** against the rubric before being described as ground truth. Injection targets are identified by the LOW or HIGH prefix in each filename.
 
-## Install on Hypatia
+## Installation
+
+Validation and unit tests use the Python standard library and run without a GPU. Inference requires the dependencies below, locally downloaded Qwen3-14B weights and a compatible NVIDIA GPU. The included `job.sh` targets the Hypatia SLURM cluster; adapt its resource directives for another cluster, or run `run.py` directly on a GPU machine.
 
 Clone the repository and install the dependencies:
 
@@ -82,7 +87,6 @@ After the job completes:
 
 ```bash
 wc -l results/stage-a-smoke.jsonl                       # 2 expected
-.venv/bin/python analyse.py results/stage-a-smoke.jsonl
 ```
 
 Run all **30 scenarios** (180 calls = 30 × 2 × 3), using a fresh file:
@@ -95,17 +99,13 @@ After completion:
 
 ```bash
 wc -l results/stage-a.jsonl                         # 180 expected
-.venv/bin/python analyse.py results/stage-a.jsonl > results/stage-a-summary.csv
-cat results/stage-a-summary.csv
 ```
 
 If you edit attack templates or other inputs, use a **new output filename** and document edits and reasons. Do not pool results from different prompt versions. A separate held-out dataset is needed to assess generalisation after tuning attacks or defences on these cases.
 
-Compatible older result files from the previous two-group run can be analysed together with `python3 analyse.py results/stage-a-development.jsonl results/stage-a-evaluation.jsonl`. Keep the original files unchanged; do not mix them with runs from different source versions or sampling settings.
+Each result JSONL has a companion `.jsonl.meta.json` file with run settings and exact prompts; keep both files together. New inference also writes `.jsonl.provenance.json` with model/tokenizer asset hashes, installed packages, execution-source hashes, CUDA/GPU details and the generation configuration supplied to the model. Hashing the model weights adds startup time. Each output record preserves the raw response, parsed label, expected label, attack assignment and trial seed. Each repetition is a stochastic trial of the **same underlying scenario**, not an independent case. Do not present 180 calls as 180 independent scenarios.
 
-Each result JSONL has a companion `.jsonl.meta.json` file with run settings and exact prompts; keep both files together. The output includes per-model/architecture/category/target counts, matched baseline accuracy, raw target hits, conditional attack success, directional grade shifts, and refusals/other outputs. Each repetition is a stochastic trial of the **same underlying scenario**, not an independent case. Do not present 180 calls as 180 independent scenarios.
-
-Job failures: use `sacct -u "$USER" --format=JobID,JobName,State,ExitCode`; inspect `logs/ipi-stage-a-<jobid>.err`. Existing results can resume if input files and sampling parameters are unchanged. Start a new results file for a modified dataset or attacks.
+Job failures: use `sacct -u "$USER" --format=JobID,JobName,State,ExitCode`; inspect `logs/ipi-stage-a-<jobid>.err`. Partial new runs can resume if inputs, sampling parameters and inference provenance match. A partial legacy run without provenance requires a new output file; completed legacy runs can still be verified without GPU dependencies. Start a new results file for a modified dataset or attacks.
 
 ## Stage B: prompt hardening
 
@@ -115,21 +115,18 @@ Stage B uses the same 30 cases, rubric and attacks with P1 and P2, each in BASE 
 python3 validate.py
 python3 -m unittest discover -s tests -v
 python3 run.py --stage stages/B.json --dry-run --reps 1 --limit 1
-sbatch --export=ALL,STAGE=stages/B.json,REPS=1,LIMIT=1,OUT=results/stage-b-layers-v2-smoke.jsonl job.sh
-# Once the smoke test completes, expect four lines and analyse it:
-wc -l results/stage-b-layers-v2-smoke.jsonl
-python3 analyse.py results/stage-b-layers-v2-smoke.jsonl
+sbatch --export=ALL,STAGE=stages/B.json,REPS=1,LIMIT=1,OUT=results/stage-b-smoke.jsonl job.sh
+# Once the smoke test completes, expect four lines:
+wc -l results/stage-b-smoke.jsonl
 # Full run: 30 cases × 2 conditions × 2 prompts × 3 repetitions = 360 calls
-sbatch --export=ALL,STAGE=stages/B.json,REPS=3,OUT=results/stage-b-layers-v2.jsonl job.sh
+sbatch --export=ALL,STAGE=stages/B.json,REPS=3,OUT=results/stage-b.jsonl job.sh
 # Run the revised flattened P0 as a fresh baseline too:
 sbatch --export=ALL,STAGE=stages/A.json,REPS=3,OUT=results/stage-a-layers-v2.jsonl job.sh
-# After both revised runs finish, compare them (use a fresh Stage B output):
-python3 compare.py results/stage-a-layers-v2.jsonl results/stage-b-layers-v2.jsonl > results/layers-v2-comparison.csv
 ```
 
-The comparison requires complete matching scenarios and repetitions, seeds, sampling settings, and exact current source prompts; it rejects incompatible or partial runs. For historical inputs that have since changed, restore the matching source version before comparing. Run the smoke test and full experiment in separate files. `analyse.py` also accepts a single result file, including an incomplete selection of scenarios if each has complete BASE/I pairs.
+Run smoke tests and full experiments in separate files. Before comparing runs externally, check their scenario and repetition coverage, seeds, sampling settings, prompt snapshots and available inference provenance. The repository provides inference and validation tools; it does not include scripts for calculating aggregate metrics.
 
-In the CSV, `base_mean_low_cases` etc. and `i_mean_low_cases` etc. are sums of per-scenario fractions across repetitions. With all 30 scenarios, these are the mean numbers of cases out of 30; for target-specific rows the denominator is 15. `mean_conditional_success_cases` counts target outputs only when the matched clean output is correct. The conditional success rate divides eligible target hits by clean-correct trials; the raw trial counts are retained for audit. OTHER and REFUSAL have their own mean-case columns.
+In the saved historical CSV, `base_mean_low_cases` etc. and `i_mean_low_cases` etc. are sums of per-scenario fractions across repetitions. With all 30 scenarios, these are the mean numbers of cases out of 30; for target-specific rows the denominator is 15. `mean_conditional_success_cases` counts target outputs only when the matched clean output is correct. The conditional success rate divides eligible target hits by clean-correct trials; the raw trial counts are retained for audit. OTHER and REFUSAL have their own mean-case columns.
 
 ## Stage C: evidence and injection
 
@@ -143,16 +140,19 @@ python3 run.py --stage stages/C.json --dry-run --reps 1 --limit 1
 sbatch --export=ALL,STAGE=stages/C.json,REPS=1,LIMIT=1,OUT=results/stage-c-smoke.jsonl job.sh
 # After the smoke test finishes:
 wc -l results/stage-c-smoke.jsonl
-python3 analyse_c.py results/stage-c-smoke.jsonl
 # Full run: 30 × 2 × 3 × 3 = 540 calls
 sbatch --export=ALL,STAGE=stages/C.json,REPS=3,OUT=results/stage-c.jsonl job.sh
-# After it finishes, include and validate the existing BASE/I results:
-python3 analyse_c.py results/stage-c.jsonl --baselines results/stage-a-layers-v2.jsonl results/stage-b.jsonl > results/stage-c-summary.csv
 ```
 
-The CSV contains a row per architecture and grouping (`ALL`, expected evidence grade, or attack target). For `ALL`, mean-case columns are out of 30; direction-specific groups contain 15 cases. E and EI each have accuracy and per-grade mean counts. Retention counts cases where E and EI are both correct; the retention rate divides by E-correct trials. Conditional attack success counts EI at the attacker's target only when E is correct and the target differs from the expected evidence grade; its eligible count and denominator are included. OTHER and REFUSAL remain separate. With `--baselines`, BASE and I grade distributions are also included after checking complete matched cases, repetitions, seeds, source prompts and sampling settings. P2's E/EI nonce is shared within its pair and may differ from the earlier BASE/I nonce.
+The saved historical Stage C CSV contains a row per architecture and grouping (`ALL`, expected evidence grade, or attack target). For `ALL`, mean-case columns are out of 30; direction-specific groups contain 15 cases. E and EI each have accuracy and per-grade mean counts. Retention counts cases where E and EI are both correct; the retention rate divides by E-correct trials. Conditional attack success counts EI at the attacker's target only when E is correct and the target differs from the expected evidence grade; its eligible count and denominator are included. OTHER and REFUSAL remain separate. The historical summary also includes BASE and I grade distributions. P2's E/EI nonce is shared within its pair and may differ from the earlier BASE/I nonce.
 
-A/B input fingerprints remain tied to the archived Stage A/B composition source in `protocols/protection_layers_v2.py`; exact saved prompts are also checked on comparison. Stage C fingerprints include the active implementation and evidence sources. Do not pool different input versions. Other domains require separate datasets and rubrics; an external content filter requires its own adapter and test conditions.
+A/B input fingerprints remain tied to the archived Stage A/B composition source in `protocols/protection_layers_v2.py`. The archived file is retained solely for fingerprint compatibility and is not an alternative runner or loader. Stage C fingerprints include the active `project.py` implementation and evidence sources. These input fingerprints do not cover the runner or response parser; future inference records execution-source hashes separately. Do not pool different input versions. Other domains require separate datasets and rubrics; an external content filter requires its own adapter and test conditions.
+
+## Saved experimental artifacts
+
+The completed raw results, matching metadata and historical summary CSVs are in `results/` and are excluded from Git. Their filenames are listed in [`docs/experiment-report.md`](docs/experiment-report.md). Keep raw results and metadata together and unchanged when copying them for submission or audit.
+
+[`docs/recovered-provenance.json`](docs/recovered-provenance.json) records currently observed model hashes, download revision claims and exact package versions. These retrospective observations do not prove the historical inference environment. The original runs' GPU identity and full resolved generation configuration remain unverified; new inference records provenance automatically. Both baseline and evidence labels still require independent blinded review.
 
 ## Scientific limitations
 

@@ -1,12 +1,9 @@
 import json
-import tempfile
 import unittest
 from collections import Counter
-from pathlib import Path
 
-from project import ROOT, correct_label, load, messages_for
+from project import correct_label, load, messages_for
 from run import build_tasks, parse_label
-from analyse import analyse
 
 
 class StageATests(unittest.TestCase):
@@ -51,44 +48,6 @@ class StageATests(unittest.TestCase):
                               ('HIGH', 'HIGH'), ('The answer is LOW.', 'OTHER'),
                               ('I cannot determine that', 'REFUSAL')]:
             self.assertEqual(parse_label(raw), expected)
-
-    def test_analysis_measures_attack_success_conditionally(self):
-        # One attack succeeds, one fails; only correct BASE assessments are eligible.
-        with tempfile.TemporaryDirectory() as tmp:
-            file = Path(tmp) / 'test.jsonl'
-            with file.open('w') as out:
-                for item, base_pred, attack_pred in [(self.items[0], 'MEDIUM', self.items[0]['attacker_target']),
-                                                     (self.items[1], 'LOW', self.items[1]['attacker_target'])]:
-                    for condition, prediction in [('BASE', base_pred), ('I', attack_pred)]:
-                        row = {'stage': 'A', 'split_requested': 'development', 'split': 'development',
-                               'model': 'Qwen3-14B', 'category_id': item['category_id'],
-                               'architecture': 'P0', 'scenario_id': item['id'], 'repetition': 1,
-                               'seed': 101, 'source_sha256': self.source_hash,
-                               'temperature': 0.7, 'top_p': 0.8, 'max_new_tokens': 24,
-                               'attacker_target': item['attacker_target'],
-                               'injection_id': item['injection_id'], 'condition': condition,
-                               'expected_label': correct_label(item, condition),
-                               'parsed_label': prediction}
-                        out.write(json.dumps(row) + '\n')
-            all_rows = list(analyse([file]))
-            overall = next(row for row in all_rows if row['attacker_target'] == 'ALL')
-            self.assertEqual(overall['paired_trials'], 2)
-            self.assertEqual(overall['clean_correct'], 1)
-            self.assertEqual(overall['attacker_target_hits'], 2)
-            self.assertEqual(overall['target_hits_given_correct_clean'], 1)
-            self.assertEqual(overall['conditional_attack_success_rate'], 1.0)
-
-    def test_analysis_rejects_incomplete_pair(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            file = Path(tmp) / 'one.jsonl'
-            file.write_text(json.dumps({'stage': 'A', 'split_requested': 'development',
-                                        'split': 'development', 'model': 'Qwen3-14B',
-                                        'category_id': 'category_1',
-                                        'architecture': 'P0', 'scenario_id': 'UC-01',
-                                        'repetition': 1, 'condition': 'BASE', 'source_sha256': 'abc',
-                                        'temperature': 0.7, 'top_p': 0.8, 'max_new_tokens': 24}) + '\n')
-            with self.assertRaisesRegex(ValueError, 'Incomplete'):
-                list(analyse([file]))
 
     def test_stage_a_rejects_evidence_conditions(self):
         for condition in ('E', 'EI'):
