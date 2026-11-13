@@ -9,10 +9,15 @@ models/
 hf_cache/
 
 # Generated experiment outputs
-results/
 logs/
+docs/
 
 # OS and editor files
 .DS_Store
 .vscode/
 .idea/
+
+# Local agent and account configuration
+.agents/
+.aws/
+.codex/

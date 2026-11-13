@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Validate Stage A dataset integrity and prompt isolation (not correctness of risk labels)."""
+"""Validate dataset integrity and prompt isolation across Stages A, B and C.
+
+These structural checks do not establish correctness of the provisional risk labels.
+"""
 from collections import Counter
 from project import correct_label, load, messages_for
 from run import build_tasks
