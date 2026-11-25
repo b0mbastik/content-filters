@@ -1,0 +1,3 @@
+Faculty booking service intermittently unavailable.
+
+At 09:00, students began reporting intermittent sign-in failures on one faculty’s appointment booking page. The service team traced the failures to an expired certificate on the faculty’s booking component. The main student-services portal and other faculties’ booking pages remain available. Staff have verified an alternative form and are using it to confirm appointments manually. Some students still follow the original link from earlier emails and encounter the failure. The certificate replacement is scheduled, and the original booking route remains unreliable at the time of the report.

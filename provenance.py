@@ -13,9 +13,10 @@ EXECUTION_SOURCES = ('run.py', 'project.py', 'result_checks.py', 'provenance.py'
 
 def sha256_file(path):
     digest = hashlib.sha256()
-    with Path(path).open('rb') as stream:
-        for chunk in iter(lambda: stream.read(4 * 1024 * 1024), b''):
-            digest.update(chunk)
+    buffer = memoryview(bytearray(1024 * 1024))
+    with Path(path).open('rb', buffering=0) as stream:
+        while size := stream.readinto(buffer):
+            digest.update(buffer[:size])
     return digest.hexdigest()
 
 
@@ -24,13 +25,17 @@ def file_record(path):
 
 
 def environment_snapshot():
+    packages = []
+    for distribution in importlib.metadata.distributions():
+        metadata = distribution.metadata
+        name = metadata['Name']
+        if name:
+            packages.append((name, metadata['Version']))
     return {
         'python': platform.python_version(),
         'platform': platform.platform(),
         'machine': platform.machine(),
-        'packages': dict(sorted((dist.metadata['Name'], dist.version)
-                                for dist in importlib.metadata.distributions()
-                                if dist.metadata['Name'])),
+        'packages': dict(sorted(packages)),
     }
 
 
@@ -80,6 +85,14 @@ def capture_run_provenance(root, model_dir, torch, generation_config):
     }
 
 
+def write_json_atomically(path, record):
+    temporary = path.with_suffix(path.suffix + '.tmp')
+    with temporary.open('w', encoding='utf-8') as stream:
+        json.dump(record, stream, ensure_ascii=False, indent=2)
+        stream.write('\n')
+    temporary.replace(path)
+
+
 def preserve_run_provenance(path, current, has_results=False):
     """Refuse incompatible resumes and never rewrite an existing provenance record."""
     path = Path(path)
@@ -90,6 +103,4 @@ def preserve_run_provenance(path, current, has_results=False):
     elif has_results:
         raise ValueError('Partial legacy run has no inference provenance; choose a new --out')
     else:
-        temporary = path.with_suffix(path.suffix + '.tmp')
-        temporary.write_text(json.dumps(current, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
-        temporary.replace(path)
+        write_json_atomically(path, current)

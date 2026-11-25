@@ -1,6 +1,8 @@
 import contextlib
+import fcntl
 import io
 import json
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -67,6 +69,43 @@ class RunnerTests(unittest.TestCase):
             with self.assertRaisesRegex(SystemExit, 'Partial legacy run'):
                 self.resume(path)
 
+    def test_resume_reports_incomplete_jsonl_row_without_modifying_output(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path, rows = self.write_completed_run(directory)
+            damaged = json.dumps(rows[0]) + '\n{"category_id": '
+            path.write_text(damaged, encoding='utf-8')
+            with self.assertRaisesRegex(SystemExit, r'Invalid result at .*completed\.jsonl:2'):
+                self.resume(path)
+            self.assertEqual(path.read_text(encoding='utf-8'), damaged)
+
+    def test_concurrent_runner_cannot_use_locked_output(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path, _ = self.write_completed_run(directory)
+            original = path.read_bytes()
+            with path.open('a', encoding='utf-8') as stream:
+                fcntl.lockf(stream, fcntl.LOCK_EX)
+                result = subprocess.run(
+                    [sys.executable, str(run.ROOT / 'run.py'), '--out', str(path),
+                     '--reps', '1', '--limit', '1'], capture_output=True, text=True, check=False,
+                )
+            self.assertEqual(result.returncode, 1)
+            self.assertIn('Another runner is using', result.stderr)
+            self.assertEqual(path.read_bytes(), original)
+
+    def test_repeated_prompts_are_reused_but_p2_nonces_are_preserved(self):
+        stage, items, prompts, _ = load('stages/B.json')
+        tasks = {(item['category_id'], item['id'], condition, arch, rep): item
+                 for item, condition, arch, rep in run.build_tasks(stage, items, 2, 1)}
+        case = f"{items[0]['category_id']}/{items[0]['id']}"
+        nonces = {f'{case}/1': 'first', f'{case}/2': 'second'}
+        with patch.object(run, 'messages_for', wraps=messages_for) as compose:
+            snapshot = run.build_prompt_snapshot(tasks, prompts, nonces)
+        self.assertEqual(compose.call_count, 6)
+        for condition in stage['conditions']:
+            self.assertEqual(snapshot[f'{case}/{condition}/P1/1'], snapshot[f'{case}/{condition}/P1/2'])
+            for rep, nonce in ((1, 'first'), (2, 'second')):
+                self.assertIn(f'DOCUMENT {nonce}>>>', snapshot[f'{case}/{condition}/P2/{rep}'][-1]['content'])
+
     def test_inference_records_effective_config_and_refuses_changed_resume(self):
         class Config:
             def __init__(self):
@@ -118,6 +157,12 @@ class RunnerTests(unittest.TestCase):
                     run.main()
                 self.assertEqual(path.read_bytes(), original)
                 self.assertEqual(model.generate.call_count, 2)
+                model.generation_config.values['top_k'] = 20
+                # A valid last row can be missing its terminating newline.
+                path.write_text(rows[0])
+                run.main()
+                self.assertEqual(path.read_text().splitlines(), rows)
+                self.assertEqual(model.generate.call_count, 3)
                 # Greedy mode must remain explicit even if model defaults enable sampling.
                 argv[2] = str(root / 'greedy.jsonl')
                 argv.extend(['--temperature', '0'])

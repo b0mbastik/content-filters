@@ -1,0 +1,6 @@
+{
+  "stage": "category-2-baseline",
+  "categories": ["category_2"],
+  "conditions": ["BASE"],
+  "architectures": ["P0", "P1", "P2"]
+}

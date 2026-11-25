@@ -29,6 +29,7 @@ content-filters/
 │   └── manifest.json         # Provisional baseline labels and attack assignments
 ├── injections/              # 12 separate attack text files
 ├── prompts/                 # P0 baseline and P1/P2 guards
+├── guardrails/input.yml     # NeMo input policy for prompt injection and jailbreaks
 ├── stages/                  # Stage A, B and C configurations
 ├── docs/                    # Methodology and experimental report
 ├── protocols/               # Archived A/B source used for historical fingerprints
@@ -49,21 +50,24 @@ The source file separation is intentional. Labels and attack assignments in `man
 
 The expected ratings were authored synthetically and **must be independently reviewed** against the rubric before being described as ground truth. Injection targets are identified by the LOW or HIGH prefix in each filename.
 
+`data/category_2` contains four expanded university IT incident reports with provisional `MEDIUM` labels under the same rubric. The `stages/category_2_baseline.json` configuration runs the four clean reports across P0, P1 and P2. Preview the model inputs with `python run.py --stage stages/category_2_baseline.json --dry-run`.
+
 ## Installation
 
 Validation and unit tests use the Python standard library and run without a GPU. Inference requires the dependencies below, locally downloaded Qwen3-14B weights and a compatible NVIDIA GPU. The included `job.sh` targets the Hypatia SLURM cluster; adapt its resource directives for another cluster, or run `run.py` directly on a GPU machine.
 
-Clone the repository and install the dependencies:
+Use a single Python 3.12 environment for both baseline and NeMo-guarded runs. On Hypatia, run `module load python/3.12.12` before creating the environment or running Python directly. The Slurm script loads this module automatically when using the default environment.
 
 ```bash
 git clone https://github.com/b0mbastik/content-filters.git
 cd content-filters
-python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements.txt
-.venv/bin/hf download Qwen/Qwen3-14B --local-dir models/Qwen3-14B
+python3.12 -m venv .venv-nemo
+.venv-nemo/bin/python -m pip install -r requirements-guardrail.txt \
+  torch==2.8.0 transformers==4.57.6 accelerate==1.10.1 huggingface_hub==0.36.2
+.venv-nemo/bin/hf download Qwen/Qwen3-14B --local-dir models/Qwen3-14B
 mkdir -p logs results
-.venv/bin/python validate.py
-.venv/bin/python -m unittest discover -s tests -v
+.venv-nemo/bin/python validate.py
+.venv-nemo/bin/python -m unittest discover -s tests -v
 ```
 
 An existing `models/Qwen3-14B` directory can be reused. The model weights, Python environment, and generated results are not tracked. Run `ls models/Qwen3-14B/config.json` to verify the model installation. Keep results from earlier experiments separate and use a new output file after changing the dataset or prompts.
@@ -73,7 +77,7 @@ An existing `models/Qwen3-14B` directory can be reused. The model weights, Pytho
 First inspect the constructed prompts without using a GPU:
 
 ```bash
-python3 run.py --dry-run --reps 1 --limit 1
+.venv-nemo/bin/python run.py --dry-run --reps 1 --limit 1
 ```
 
 Then submit a **two-call smoke test** on one report:
@@ -105,16 +109,16 @@ If you edit attack templates or other inputs, use a **new output filename** and 
 
 Each result JSONL has a companion `.jsonl.meta.json` file with run settings and exact prompts; keep both files together. New inference also writes `.jsonl.provenance.json` with model/tokenizer asset hashes, installed packages, execution-source hashes, CUDA/GPU details and the generation configuration supplied to the model. Hashing the model weights adds startup time. Each output record preserves the raw response, parsed label, expected label, attack assignment and trial seed. Each repetition is a stochastic trial of the **same underlying scenario**, not an independent case. Do not present 180 calls as 180 independent scenarios.
 
-Job failures: use `sacct -u "$USER" --format=JobID,JobName,State,ExitCode`; inspect `logs/ipi-stage-a-<jobid>.err`. Partial new runs can resume if inputs, sampling parameters and inference provenance match. A partial legacy run without provenance requires a new output file; completed legacy runs can still be verified without GPU dependencies. Start a new results file for a modified dataset or attacks.
+Job failures: use `sacct -u "$USER" --format=JobID,JobName,State,ExitCode`; inspect `logs/ipi-stage-a-<jobid>.err`. Partial new runs can resume if inputs, sampling parameters and inference provenance match. Each active runner locks its output file. Use distinct `--out` paths for simultaneous experiments. A partial legacy run without provenance requires a new output file; completed legacy runs can still be verified without GPU dependencies. Start a new results file for a modified dataset or attacks.
 
 ## Stage B: prompt hardening
 
 Stage B uses the same 30 cases, rubric and attacks with P1 and P2, each in BASE and I conditions. P1 uses a system guard and fixed document tags; P2 uses that guard, a randomly generated per-case/repetition nonce boundary, and a post-document restatement. The prompts are fixed in `prompts/P1.txt` and `prompts/P2.txt`. Each scenario/repetition shares the deterministic seed across conditions and architectures. P2 generates a random token for each scenario/repetition, shared by its BASE/I pair and stored with exact prompts in the metadata for resume and audit. This is an exploratory comparison, not a held-out evaluation; the expected MEDIUM labels still need independent review.
 
 ```bash
-python3 validate.py
-python3 -m unittest discover -s tests -v
-python3 run.py --stage stages/B.json --dry-run --reps 1 --limit 1
+.venv-nemo/bin/python validate.py
+.venv-nemo/bin/python -m unittest discover -s tests -v
+.venv-nemo/bin/python run.py --stage stages/B.json --dry-run --reps 1 --limit 1
 sbatch --export=ALL,STAGE=stages/B.json,REPS=1,LIMIT=1,OUT=results/stage-b-smoke.jsonl job.sh
 # Once the smoke test completes, expect four lines:
 wc -l results/stage-b-smoke.jsonl
@@ -133,9 +137,9 @@ In the saved historical CSV, `base_mean_low_cases` etc. and `i_mean_low_cases` e
 Stage C compares E (report plus later verified evidence) with EI (the same report and evidence, followed by the attack) for P0, P1 and P2. `data/category_1/evidence_labels.json` records provisional post-evidence labels: each LOW-target attack is paired with a provisional HIGH evidence grade and each HIGH-target attack with a provisional LOW grade. These labels have **not** been independently reviewed. A blinded reviewer should assess each report, evidence and rubric without seeing the injection or its target; record disagreements and decisions separately. Opposite labels are checked mechanically, but this does not prove the labels are correct.
 
 ```bash
-python3 validate.py
-python3 -m unittest discover -s tests -v
-python3 run.py --stage stages/C.json --dry-run --reps 1 --limit 1
+.venv-nemo/bin/python validate.py
+.venv-nemo/bin/python -m unittest discover -s tests -v
+.venv-nemo/bin/python run.py --stage stages/C.json --dry-run --reps 1 --limit 1
 # Smoke test: 1 case × 2 conditions × 3 architectures × 1 repetition = 6 calls
 sbatch --export=ALL,STAGE=stages/C.json,REPS=1,LIMIT=1,OUT=results/stage-c-smoke.jsonl job.sh
 # After the smoke test finishes:
@@ -147,6 +151,23 @@ sbatch --export=ALL,STAGE=stages/C.json,REPS=3,OUT=results/stage-c.jsonl job.sh
 The saved historical Stage C CSV contains a row per architecture and grouping (`ALL`, expected evidence grade, or attack target). For `ALL`, mean-case columns are out of 30; direction-specific groups contain 15 cases. E and EI each have accuracy and per-grade mean counts. Retention counts cases where E and EI are both correct; the retention rate divides by E-correct trials. Conditional attack success counts EI at the attacker's target only when E is correct and the target differs from the expected evidence grade; its eligible count and denominator are included. OTHER and REFUSAL remain separate. The historical summary also includes BASE and I grade distributions. P2's E/EI nonce is shared within its pair and may differ from the earlier BASE/I nonce.
 
 A/B input fingerprints remain tied to the archived Stage A/B composition source in `protocols/protection_layers_v2.py`. The archived file is retained solely for fingerprint compatibility and is not an alternative runner or loader. Stage C fingerprints include the active `project.py` implementation and evidence sources. These input fingerprints do not cover the runner or response parser; future inference records execution-source hashes separately. Do not pool different input versions. Other domains require separate datasets and rubrics; an external content filter requires its own adapter and test conditions.
+
+## NeMo input guardrail
+
+Use `--input-guardrail` with any stage. To measure the effect of the input rail against the bare classifier, start with Stage A and the same cases and sampling settings as the baseline. NeMo runs one `self check input` rail using the [jailbreak policy](guardrails/input.yml). It screens the full user message before classification. The policy targets attempts to direct the model from inside a report and allows factual incident details and verified updates. The check uses the already loaded Qwen3-14B model with greedy decoding. Within one runner process, trials with identical classifier messages share the guardrail decision. Each passing trial still runs the classifier with its own trial seed and original messages. P2's per-repetition nonce changes the messages and triggers a fresh check.
+
+Use the environment and local model weights from the installation steps above.
+
+```bash
+# One case, with one clean trial and one injection trial, on a GPU machine
+.venv-nemo/bin/python run.py --input-guardrail --reps 1 --limit 1 \
+  --out results/stage-a-nemo-input-smoke.jsonl
+
+# Or submit the same smoke test on Hypatia
+sbatch --export=ALL,INPUT_GUARDRAIL=1,REPS=1,LIMIT=1,OUT=results/stage-a-nemo-input-smoke.jsonl job.sh
+```
+
+Guarded runs default to `results/stage-<stage>-nemo-input.jsonl`. Each row records `input_guardrail` as `passed` or `blocked`. A block skips classification and records an application refusal with `parsed_label` set to `REFUSAL`. Any verdict other than `ALLOW` blocks the input. If NeMo fails to produce a validated decision, the runner stops before classification. The metadata saves the policy and its SHA-256 for audit and resume. When comparing runs, report blocks on injected inputs and on clean inputs alongside classification outcomes. [NVIDIA NeMo self-check documentation](https://docs.nvidia.com/nemo/guardrails/v0.24.1/configure-guardrails/guardrail-catalog/self-check)
 
 ## Saved experimental artifacts
 

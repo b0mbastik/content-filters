@@ -1,6 +1,7 @@
 
 # Python environment
 .venv/
+.venv-nemo/
 __pycache__/
 *.py[cod]
 

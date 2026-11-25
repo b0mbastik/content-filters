@@ -1,0 +1,361 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-11-25T17:17:24.651408+00:00",
+  "identity": {
+    "model": {
+      "files": {
+        "config.json": {
+          "bytes": 728,
+          "sha256": "e73c3664ca09b10a673fef0c22e8a6b456201d49bd4713c9691f775720e8857a"
+        },
+        "generation_config.json": {
+          "bytes": 239,
+          "sha256": "2325da0f15bb848e018c5ae071b7943332e9f871d6b60e2ed22ca97d4cb993d2"
+        },
+        "merges.txt": {
+          "bytes": 1671853,
+          "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+        },
+        "model-00001-of-00008.safetensors": {
+          "bytes": 3841788544,
+          "sha256": "e942bdbdf08857d16a8fef7d1dae9fceabeb4e84def6043485fe2f6f085dab0e"
+        },
+        "model-00002-of-00008.safetensors": {
+          "bytes": 3963750816,
+          "sha256": "f7c9c6eee628f5ad831d2d1d292e120505e5fcadeb38f88b4d3c4cb86306ccf9"
+        },
+        "model-00003-of-00008.safetensors": {
+          "bytes": 3963750880,
+          "sha256": "dfb8c5df9404b41ad6ae74e8b6b367135f017b4467b884cf71b17c71954f18a9"
+        },
+        "model-00004-of-00008.safetensors": {
+          "bytes": 3963750880,
+          "sha256": "eab286fec759e3e59ab228621aefa0fef14ed56039e06f959e67257d5af7604d"
+        },
+        "model-00005-of-00008.safetensors": {
+          "bytes": 3963750880,
+          "sha256": "97f0dc2992e59da95c466eff6f4fd0c8335843bbc36ed5c913a6f5150748c0e6"
+        },
+        "model-00006-of-00008.safetensors": {
+          "bytes": 3963750880,
+          "sha256": "9e8e76a013cd5e253865b792991e0b410f869b136b3c500079b531b09198e99e"
+        },
+        "model-00007-of-00008.safetensors": {
+          "bytes": 3963750880,
+          "sha256": "0aee70ee6e91dc00d818804fb47f124d13ee4ad5b4a64553e09dbf9391cd5750"
+        },
+        "model-00008-of-00008.safetensors": {
+          "bytes": 1912371880,
+          "sha256": "0d6b92296e326d39bbbaeb32c3ec454ac606da843d4c8ffa8edf010b62b8c9e0"
+        },
+        "model.safetensors.index.json": {
+          "bytes": 36514,
+          "sha256": "62d7ad35757bae5e7baa452cb1483178b7daa50e869e923226b8da10871f7ebc"
+        },
+        "tokenizer.json": {
+          "bytes": 11422654,
+          "sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4"
+        },
+        "tokenizer_config.json": {
+          "bytes": 9732,
+          "sha256": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101"
+        },
+        "vocab.json": {
+          "bytes": 2776833,
+          "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+        }
+      },
+      "download_metadata": {
+        ".gitattributes": {
+          "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+          "etag": "52373fe24473b1aa44333d318f578ae6bf04b49b"
+        },
+        "LICENSE": {
+          "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+          "etag": "6634c8cc3133b3848ec74b9f275acaaa1ea618ab"
+        },
+        "README.md": {
+          "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+          "etag": "3f1eaf4222cee3d84fdb3c6611afd7ff3a11dd8c"
+        },
+        "config.json": {
+          "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+          "etag": "37e7491082573462e8545299cdf6938e8b684e31"
+        },
+        "generation_config.json": {
+          "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+          "etag": "20a8a9156fc8c3f25295ca067f61fdf120d517c5"
+        },
+        "merges.txt": {
+          "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+          "etag": "31349551d90c7606f325fe0f11bbb8bd5fa0d7c7"
+        },
+        "model-00001-of-00008.safetensors": {
+          "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+          "etag": "e942bdbdf08857d16a8fef7d1dae9fceabeb4e84def6043485fe2f6f085dab0e"
+        },
+        "model-00002-of-00008.safetensors": {
+          "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+          "etag": "f7c9c6eee628f5ad831d2d1d292e120505e5fcadeb38f88b4d3c4cb86306ccf9"
+        },
+        "model-00003-of-00008.safetensors": {
+          "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+          "etag": "dfb8c5df9404b41ad6ae74e8b6b367135f017b4467b884cf71b17c71954f18a9"
+        },
+        "model-00004-of-00008.safetensors": {
+          "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+          "etag": "eab286fec759e3e59ab228621aefa0fef14ed56039e06f959e67257d5af7604d"
+        },
+        "model-00005-of-00008.safetensors": {
+          "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+          "etag": "97f0dc2992e59da95c466eff6f4fd0c8335843bbc36ed5c913a6f5150748c0e6"
+        },
+        "model-00006-of-00008.safetensors": {
+          "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+          "etag": "9e8e76a013cd5e253865b792991e0b410f869b136b3c500079b531b09198e99e"
+        },
+        "model-00007-of-00008.safetensors": {
+          "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+          "etag": "0aee70ee6e91dc00d818804fb47f124d13ee4ad5b4a64553e09dbf9391cd5750"
+        },
+        "model-00008-of-00008.safetensors": {
+          "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+          "etag": "0d6b92296e326d39bbbaeb32c3ec454ac606da843d4c8ffa8edf010b62b8c9e0"
+        },
+        "model.safetensors.index.json": {
+          "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+          "etag": "b4d92f9fec7ec78a89aaf1cf9d740ffc69cb9aac"
+        },
+        "tokenizer.json": {
+          "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+          "etag": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4"
+        },
+        "tokenizer_config.json": {
+          "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+          "etag": "417d038a63fa3de29cfde265caedae14d1a58d92"
+        },
+        "vocab.json": {
+          "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+          "etag": "4783fe10ac3adce15ac8f358ef5462739852c569"
+        }
+      }
+    },
+    "environment": {
+      "python": "3.12.12",
+      "platform": "Linux-5.14.0-427.24.1.el9_4.x86_64-x86_64-with-glibc2.34",
+      "machine": "x86_64",
+      "packages": {
+        "Jinja2": "3.1.6",
+        "MarkupSafe": "3.0.4",
+        "PyYAML": "6.0.4",
+        "Pygments": "2.21.0",
+        "accelerate": "1.10.1",
+        "aiohappyeyeballs": "2.7.1",
+        "aiohttp": "3.14.5",
+        "aiohttp-retry": "2.9.1",
+        "aiosignal": "1.4.0",
+        "annotated-doc": "0.0.7",
+        "annotated-types": "0.8.0",
+        "anyio": "4.16.0",
+        "attrs": "26.1.0",
+        "certifi": "2026.11.20",
+        "charset-normalizer": "3.5.3",
+        "dataclasses-json": "0.6.7",
+        "fastembed": "0.9.1",
+        "filelock": "4.3.0",
+        "flatbuffers": "25.12.19",
+        "frozenlist": "1.8.0",
+        "fsspec": "2026.9.0",
+        "h11": "0.16.0",
+        "hf-xet": "1.8.0",
+        "httpcore": "1.0.9",
+        "httpx": "0.28.1",
+        "huggingface_hub": "0.36.2",
+        "idna": "3.20",
+        "jsonschema": "4.26.0",
+        "jsonschema-specifications": "2025.9.1",
+        "lark": "1.3.1",
+        "loguru": "0.7.3",
+        "markdown-it-py": "4.3.0",
+        "marshmallow": "3.26.2",
+        "mdurl": "0.1.2",
+        "mmh3": "5.3.1",
+        "mpmath": "1.3.0",
+        "multidict": "7.2.1",
+        "mypy_extensions": "1.2.0",
+        "nemoguardrails": "0.24.1",
+        "nest-asyncio": "1.6.0",
+        "networkx": "3.7",
+        "numpy": "2.5.5",
+        "nvidia-cublas-cu12": "12.8.4.1",
+        "nvidia-cuda-cupti-cu12": "12.8.90",
+        "nvidia-cuda-nvrtc-cu12": "12.8.93",
+        "nvidia-cuda-runtime-cu12": "12.8.90",
+        "nvidia-cudnn-cu12": "9.10.2.21",
+        "nvidia-cufft-cu12": "11.3.3.83",
+        "nvidia-cufile-cu12": "1.13.1.3",
+        "nvidia-curand-cu12": "10.3.9.90",
+        "nvidia-cusolver-cu12": "11.7.3.90",
+        "nvidia-cusparse-cu12": "12.5.8.93",
+        "nvidia-cusparselt-cu12": "0.7.1",
+        "nvidia-nccl-cu12": "2.27.3",
+        "nvidia-nvjitlink-cu12": "12.8.93",
+        "nvidia-nvtx-cu12": "12.8.90",
+        "onnxruntime": "1.32.0",
+        "packaging": "26.3",
+        "pillow": "13.0.0",
+        "pip": "25.0.1",
+        "prompt_toolkit": "3.0.53",
+        "propcache": "0.5.4",
+        "protobuf": "7.36.2",
+        "psutil": "7.2.2",
+        "py_rust_stemmers": "0.1.8",
+        "pydantic": "2.14.4",
+        "pydantic_core": "2.50.5",
+        "referencing": "0.37.0",
+        "regex": "2026.11.19",
+        "requests": "2.34.2",
+        "rich": "15.0.0",
+        "rpds-py": "2026.9.1",
+        "safetensors": "0.8.0",
+        "setuptools": "84.2.1",
+        "shellingham": "1.5.4",
+        "simpleeval": "1.0.8",
+        "sympy": "1.14.0",
+        "tokenizers": "0.22.2",
+        "torch": "2.8.0",
+        "tqdm": "4.70.1",
+        "transformers": "4.57.6",
+        "triton": "3.4.0",
+        "typer": "0.29.2",
+        "typing-inspect": "0.9.0",
+        "typing-inspection": "0.4.5",
+        "typing_extensions": "4.16.0",
+        "urllib3": "2.8.0",
+        "wcwidth": "0.9.5",
+        "yarl": "1.25.1"
+      }
+    },
+    "hardware": {
+      "cuda_runtime": "12.8",
+      "cudnn": 91002,
+      "devices": [
+        {
+          "name": "NVIDIA A100-SXM4-80GB",
+          "capability": [
+            8,
+            0
+          ],
+          "total_memory": 85100068864
+        }
+      ]
+    },
+    "execution_sources": {
+      "run.py": {
+        "bytes": 13575,
+        "sha256": "42f252bff1a45eaeabbc1932c49c7cdbaa41d3f71deb5e18a7666b388ba4229d"
+      },
+      "project.py": {
+        "bytes": 5923,
+        "sha256": "533d3eb718205cec0c43ce97424f7681326f22b9fcd1810719cdeba300e5f6c1"
+      },
+      "result_checks.py": {
+        "bytes": 2742,
+        "sha256": "6519487a75978ade30a9dd3e135dc4f3cd5c1604927476801637384832428912"
+      },
+      "provenance.py": {
+        "bytes": 4251,
+        "sha256": "373440d057b2a196ff6eec8e48ffdfbfc6575d23c993e7a5d478f210a7ec83d1"
+      }
+    },
+    "generation_config": {
+      "max_length": 20,
+      "max_new_tokens": 24,
+      "min_length": 0,
+      "min_new_tokens": null,
+      "early_stopping": false,
+      "max_time": null,
+      "stop_strings": null,
+      "do_sample": true,
+      "num_beams": 1,
+      "use_cache": true,
+      "cache_implementation": null,
+      "cache_config": null,
+      "return_legacy_cache": null,
+      "prefill_chunk_size": null,
+      "temperature": 0.7,
+      "top_k": 20,
+      "top_p": 0.8,
+      "min_p": null,
+      "typical_p": 1.0,
+      "epsilon_cutoff": 0.0,
+      "eta_cutoff": 0.0,
+      "repetition_penalty": 1.0,
+      "encoder_repetition_penalty": 1.0,
+      "length_penalty": 1.0,
+      "no_repeat_ngram_size": 0,
+      "bad_words_ids": null,
+      "renormalize_logits": false,
+      "forced_bos_token_id": null,
+      "forced_eos_token_id": null,
+      "remove_invalid_values": false,
+      "exponential_decay_length_penalty": null,
+      "suppress_tokens": null,
+      "begin_suppress_tokens": null,
+      "sequence_bias": null,
+      "token_healing": false,
+      "guidance_scale": null,
+      "watermarking_config": null,
+      "num_return_sequences": 1,
+      "output_attentions": false,
+      "output_hidden_states": false,
+      "output_scores": false,
+      "output_logits": null,
+      "return_dict_in_generate": false,
+      "pad_token_id": 151645,
+      "bos_token_id": 151643,
+      "eos_token_id": [
+        151645,
+        151643
+      ],
+      "encoder_no_repeat_ngram_size": 0,
+      "decoder_start_token_id": null,
+      "is_assistant": false,
+      "num_assistant_tokens": 20,
+      "num_assistant_tokens_schedule": "constant",
+      "assistant_confidence_threshold": 0.4,
+      "prompt_lookup_num_tokens": null,
+      "max_matching_ngram_size": null,
+      "assistant_early_exit": null,
+      "assistant_lookbehind": 10,
+      "target_lookbehind": 10,
+      "disable_compile": false,
+      "low_memory": null,
+      "penalty_alpha": null,
+      "dola_layers": null,
+      "diversity_penalty": 0.0,
+      "num_beam_groups": 1,
+      "constraints": null,
+      "force_words_ids": null,
+      "_from_model_config": false,
+      "transformers_version": "4.57.6"
+    },
+    "inference": {
+      "enable_thinking": false,
+      "dtype": "bfloat16",
+      "device": "cuda:0"
+    },
+    "input_guardrail": {
+      "policy_sha256": "ad920ffe06a215c5fa281e28e015d6e5aeafe3ddfcda1cd19e102320a523a383",
+      "adapter": {
+        "bytes": 1964,
+        "sha256": "233a0c73e42582d9cee3c597a33536eb0e9ba030218cd81ebf3eb63f39f2ffb2"
+      },
+      "reuse_identical_messages_within_process": true,
+      "generation_overrides": {
+        "do_sample": false,
+        "pad_token_id": 151645
+      }
+    }
+  }
+}

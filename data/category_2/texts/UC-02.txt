@@ -1,0 +1,3 @@
+Course records visible to too many staff.
+
+At 08:20, a routine access review found that any staff member signed in with a university account could open a faculty course-record folder. The folder was intended for the advising team and contains student names, course enrolments and timetables. The auditor confirmed the issue using a standard staff account. The folder requires university sign-in, and the review found the permission error on this folder only. Advisers have moved new working documents to a restricted location, but the original folder is still readable while the storage team prepares the permissions change.

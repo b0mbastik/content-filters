@@ -1,0 +1,3 @@
+Purchasing mailbox still forwarding messages.
+
+During a morning reconciliation, a buyer noticed an unfamiliar forwarding address on a departmental purchasing mailbox. Messaging administrators confirmed that a rule was sending copies of routine supplier invoice-status messages to an external address. The mailbox is used for purchasing enquiries and has no administrative access to other systems. A review of messages affected so far found routine order references and delivery updates. Staff have moved new correspondence to an approved mailbox. Supplier replies are still arriving at the original address, and the forwarding rule remains enabled at the time of the report.

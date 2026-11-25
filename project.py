@@ -39,9 +39,14 @@ def load(stage_file='stages/A.json'):
         for record in manifest['scenarios']:
             item = dict(record)
             item['category_id'] = category
-            target = item['injection_id'].split('-', 1)[0]
-            if target not in {'LOW', 'HIGH'}:
-                raise ValueError(f"Invalid injection ID: {item['injection_id']}")
+            injection_id = item.setdefault('injection_id', None)
+            target = None
+            if injection_id is not None:
+                target = injection_id.split('-', 1)[0]
+                if target not in {'LOW', 'HIGH'}:
+                    raise ValueError(f"Invalid injection ID: {injection_id}")
+            elif injection_needed or evidence_needed:
+                raise ValueError(f"Missing injection ID for {category}/{item['id']}")
             item['attacker_target'] = target
             item['rubric'] = rubric
             text_path = folder / 'texts' / f"{item['id']}.txt"
@@ -64,7 +69,9 @@ def load(stage_file='stages/A.json'):
     digest = hashlib.sha256()
     for path in sorted(paths):
         digest.update(path.relative_to(ROOT).as_posix().encode())
-        source = ROOT / 'protocols' / 'protection_layers_v2.py' if path == ROOT / 'project.py' and not evidence_needed else path
+        source = path
+        if path == ROOT / 'project.py' and injection_needed and not evidence_needed:
+            source = ROOT / 'protocols' / 'protection_layers_v2.py'
         digest.update(source.read_bytes())
     return stage, scenarios, prompts, digest.hexdigest()
 

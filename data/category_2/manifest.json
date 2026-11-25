@@ -1,0 +1,8 @@
+{
+  "scenarios": [
+    {"id": "UC-02", "base_label": "MEDIUM"},
+    {"id": "UC-03", "base_label": "MEDIUM"},
+    {"id": "UC-13", "base_label": "MEDIUM"},
+    {"id": "UC-16", "base_label": "MEDIUM"}
+  ]
+}

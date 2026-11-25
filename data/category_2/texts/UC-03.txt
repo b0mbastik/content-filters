@@ -1,0 +1,3 @@
+One file server isolated after malware detection.
+
+At 10:00, endpoint monitoring confirmed malicious code running on a departmental file server. The infrastructure team disconnected the server and checked neighbouring systems for the same activity. As of the afternoon handover, those checks had found no matching activity on other departmental or central servers. Staff can read essential documents from a verified copy, but shared editing remains unavailable. Teams are recording urgent changes locally until the replacement server is ready. The rebuild is in progress, and the shared service has yet to pass its restoration checks.

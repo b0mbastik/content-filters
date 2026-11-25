@@ -1,0 +1,2 @@
+-r requirements.txt
+nemoguardrails==0.24.1
