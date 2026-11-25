@@ -8,6 +8,23 @@ LABELS = {'LOW', 'MEDIUM', 'HIGH'}
 CONDITIONS = {'BASE', 'I', 'E', 'EI'}
 
 
+def injection_target(injection_id):
+    """Derive the attacker target from an injection ID.
+
+    Version 1 IDs are prefixed with the target (LOW-01, HIGH-03). Version 2
+    fixture IDs encode the target in the direction token: positive fixtures
+    push the rating down to LOW, negative fixtures push it up to HIGH.
+    """
+    prefix = injection_id.split('-', 1)[0]
+    if prefix in {'LOW', 'HIGH'}:
+        return prefix
+    if 'pos' in injection_id:
+        return 'LOW'
+    if 'neg' in injection_id:
+        return 'HIGH'
+    raise ValueError(f'Cannot derive attacker target from injection ID: {injection_id}')
+
+
 def load(stage_file='stages/A.json'):
     stage_path = ROOT / stage_file
     stage = json.loads(stage_path.read_text(encoding='utf-8'))
@@ -15,6 +32,7 @@ def load(stage_file='stages/A.json'):
         raise ValueError('Unsupported condition in stage configuration')
     injection_needed = bool({'I', 'EI'} & set(stage['conditions']))
     evidence_needed = bool({'E', 'EI'} & set(stage['conditions']))
+    injections_dir = ROOT / stage.get('injections_dir', 'injections')
     prompts = {name: (ROOT / 'prompts' / f'{name}.txt').read_text(encoding='utf-8').strip()
                for name in stage['architectures']}
     if 'P2' in stage['architectures'] and 'P1' not in prompts:
@@ -24,7 +42,7 @@ def load(stage_file='stages/A.json'):
     scenarios = []
     for category in stage['categories']:
         folder = ROOT / 'data' / category
-        manifest_path = folder / 'manifest.json'
+        manifest_path = folder / stage.get('manifest', 'manifest.json')
         rubric_path = folder / 'rubric.txt'
         manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
         evidence_labels = {}
@@ -42,18 +60,17 @@ def load(stage_file='stages/A.json'):
             injection_id = item.setdefault('injection_id', None)
             target = None
             if injection_id is not None:
-                target = injection_id.split('-', 1)[0]
-                if target not in {'LOW', 'HIGH'}:
-                    raise ValueError(f"Invalid injection ID: {injection_id}")
+                target = injection_target(injection_id)
             elif injection_needed or evidence_needed:
                 raise ValueError(f"Missing injection ID for {category}/{item['id']}")
             item['attacker_target'] = target
             item['rubric'] = rubric
-            text_path = folder / 'texts' / f"{item['id']}.txt"
+            report_id = item.get('report_id', item['id'])
+            text_path = folder / 'texts' / f"{report_id}.txt"
             item['base_text'] = text_path.read_text(encoding='utf-8').strip()
             paths.add(text_path)
             if injection_needed:
-                attack_path = ROOT / 'injections' / f"{item['injection_id']}.txt"
+                attack_path = injections_dir / f"{item['injection_id']}.txt"
                 item['injection_text'] = attack_path.read_text(encoding='utf-8').strip()
                 paths.add(attack_path)
             if evidence_needed:

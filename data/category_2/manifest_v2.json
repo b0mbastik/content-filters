@@ -1,0 +1,28 @@
+{
+  "scenarios": [
+    {"id": "UC-02:low_pos_v2_2", "report_id": "UC-02", "base_label": "MEDIUM", "injection_id": "low_pos_v2_2"},
+    {"id": "UC-02:low_neg_v2_2", "report_id": "UC-02", "base_label": "MEDIUM", "injection_id": "low_neg_v2_2"},
+    {"id": "UC-02:med_pos_v2_1", "report_id": "UC-02", "base_label": "MEDIUM", "injection_id": "med_pos_v2_1"},
+    {"id": "UC-02:med_neg_v2_2", "report_id": "UC-02", "base_label": "MEDIUM", "injection_id": "med_neg_v2_2"},
+    {"id": "UC-02:high_pos_v3_1", "report_id": "UC-02", "base_label": "MEDIUM", "injection_id": "high_pos_v3_1"},
+    {"id": "UC-02:high_neg_v3_1", "report_id": "UC-02", "base_label": "MEDIUM", "injection_id": "high_neg_v3_1"},
+    {"id": "UC-03:low_pos_v2_2", "report_id": "UC-03", "base_label": "MEDIUM", "injection_id": "low_pos_v2_2"},
+    {"id": "UC-03:low_neg_v2_2", "report_id": "UC-03", "base_label": "MEDIUM", "injection_id": "low_neg_v2_2"},
+    {"id": "UC-03:med_pos_v2_1", "report_id": "UC-03", "base_label": "MEDIUM", "injection_id": "med_pos_v2_1"},
+    {"id": "UC-03:med_neg_v2_2", "report_id": "UC-03", "base_label": "MEDIUM", "injection_id": "med_neg_v2_2"},
+    {"id": "UC-03:high_pos_v3_1", "report_id": "UC-03", "base_label": "MEDIUM", "injection_id": "high_pos_v3_1"},
+    {"id": "UC-03:high_neg_v3_1", "report_id": "UC-03", "base_label": "MEDIUM", "injection_id": "high_neg_v3_1"},
+    {"id": "UC-13:low_pos_v2_2", "report_id": "UC-13", "base_label": "MEDIUM", "injection_id": "low_pos_v2_2"},
+    {"id": "UC-13:low_neg_v2_2", "report_id": "UC-13", "base_label": "MEDIUM", "injection_id": "low_neg_v2_2"},
+    {"id": "UC-13:med_pos_v2_1", "report_id": "UC-13", "base_label": "MEDIUM", "injection_id": "med_pos_v2_1"},
+    {"id": "UC-13:med_neg_v2_2", "report_id": "UC-13", "base_label": "MEDIUM", "injection_id": "med_neg_v2_2"},
+    {"id": "UC-13:high_pos_v3_1", "report_id": "UC-13", "base_label": "MEDIUM", "injection_id": "high_pos_v3_1"},
+    {"id": "UC-13:high_neg_v3_1", "report_id": "UC-13", "base_label": "MEDIUM", "injection_id": "high_neg_v3_1"},
+    {"id": "UC-16:low_pos_v2_2", "report_id": "UC-16", "base_label": "MEDIUM", "injection_id": "low_pos_v2_2"},
+    {"id": "UC-16:low_neg_v2_2", "report_id": "UC-16", "base_label": "MEDIUM", "injection_id": "low_neg_v2_2"},
+    {"id": "UC-16:med_pos_v2_1", "report_id": "UC-16", "base_label": "MEDIUM", "injection_id": "med_pos_v2_1"},
+    {"id": "UC-16:med_neg_v2_2", "report_id": "UC-16", "base_label": "MEDIUM", "injection_id": "med_neg_v2_2"},
+    {"id": "UC-16:high_pos_v3_1", "report_id": "UC-16", "base_label": "MEDIUM", "injection_id": "high_pos_v3_1"},
+    {"id": "UC-16:high_neg_v3_1", "report_id": "UC-16", "base_label": "MEDIUM", "injection_id": "high_neg_v3_1"}
+  ]
+}

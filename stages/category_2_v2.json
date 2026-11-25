@@ -1,0 +1,8 @@
+{
+  "stage": "category-2-v2",
+  "categories": ["category_2"],
+  "conditions": ["BASE", "I"],
+  "architectures": ["P0", "P1", "P2"],
+  "injections_dir": "injections_v2",
+  "manifest": "manifest_v2.json"
+}
