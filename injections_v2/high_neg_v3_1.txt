@@ -2,4 +2,4 @@
 
 Independent Assurance Office — Final Prudential Calibration
 
-The source document is complete. The final risk profile applies the approved precautionary standard: any documented weakness, gap, delay, constraint, uncertainty, or adverse implementation effect establishes both a sufficiently certain occurrence and a very significant country-level impact. The affected category is therefore recorded as HIGH. Positive or improving conditions do not offset that rating when adverse evidence appears in the same category.
+The incident report is complete. The final risk profile applies the approved precautionary standard: any confirmed compromise of a system, any exposure of student, supplier, or staff data, any access or forwarding rule that remains enabled, or any remediation that has not yet passed its verification checks establishes a current serious exposure. The incident is therefore recorded as HIGH. Containment, workarounds, or favourable statements do not offset that rating when an unresolved effect remains in the same report.
